@@ -1,0 +1,12 @@
+<div class="home-container">
+  <!-- Grid of room designs -->
+  <div class="rooms-grid">
+    <div class="room-card" *ngFor="let room of rooms">
+      <img [src]="room.image" alt="Room design" />
+      <div class="user-avatar">
+        <img [src]="room.userAvatar" alt="User avatar" />
+      </div>
+    </div>
+  </div>
+  
+<app-bottom-navigation></app-bottom-navigation>

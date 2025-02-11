@@ -1,0 +1,74 @@
+
+<div class="profile-container">
+  <!-- زر الإغلاق -->
+  <button class="close-button">
+    <span class="material-icons">close</span>
+  </button>
+
+  <!-- صورة المستخدم -->
+  <div class="profile-picture">
+    <img src="https://khamsat.hsoubcdn.com/images/services/661186/4d04df5f779da75c108be6635f98e39d.jpg" alt="User Avatar" />
+    <div class="edit-icon">
+      <span class="material-icons">edit</span>
+    </div>
+  </div>
+
+  <!-- الحقول -->
+  <div class="profile-fields">
+    <input type="text" placeholder="Full Name" />
+    <input type="text" placeholder="User Name" />
+    <input type="email" placeholder="email@gmail.com" />
+    <button class="change-password" (click)="togglePasswordModal()">Change Password</button>
+  </div>
+
+  <!-- زر الحفظ وتسجيل الخروج -->
+  <div class="actions">
+    <button class="save-button">Save Changes</button>
+    <button class="logout-button">Log Out</button>
+  </div>
+</div>
+
+<div class="password-modal" *ngIf="isPasswordModalOpen">
+  <div class="modal-content">
+    <h3>Change Password</h3>
+    <form (submit)="handleChangePassword()">
+      <!-- الحقل الأول: كلمة المرور القديمة -->
+      <input
+        type="password"
+        placeholder="Old Password"
+        [(ngModel)]="oldPassword"
+        name="oldPassword"
+        required
+      />
+
+      <!-- الحقل الثاني: كلمة المرور الجديدة -->
+      <input
+        type="password"
+        placeholder="New Password"
+        [(ngModel)]="newPassword"
+        name="newPassword"
+        required
+      />
+
+      <!-- الحقل الثالث: تأكيد كلمة المرور الجديدة -->
+      <input
+        type="password"
+        placeholder="Confirm New Password"
+        [(ngModel)]="confirmNewPassword"
+        name="confirmNewPassword"
+        required
+      />
+
+      <div class="modal-actions">
+        <!-- زر إلغاء -->
+        <button type="button" class="cancel-button" (click)="togglePasswordModal()">
+          Cancel
+        </button>
+
+        <!-- زر الحفظ -->
+        <button type="submit" class="save-button">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+<app-bottom-navigation></app-bottom-navigation>

@@ -1,0 +1,116 @@
+/* إعادة تعيين القيم الافتراضية */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, app-root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #0d0219; /* لون الخلفية */
+}
+
+/* استخدام Flexbox لضمان الامتداد الكامل */
+body {
+  display: flex;
+  justify-content: center; /* توسيط أفقي */
+  align-items: center; /* توسيط عمودي */
+  font-family: Arial, sans-serif;
+}
+
+/* الحاوية الرئيسية */
+.login-container {
+  width: 100vw; /* عرض الشاشة بالكامل */
+  height: 100vh; /* ارتفاع الشاشة بالكامل */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* توسيط داخلي عمودي */
+  align-items: center; /* توسيط داخلي أفقي */
+   /* لون الحاوية */
+  color: #fff;
+}
+
+h2 {
+  margin-bottom: 20px;
+}
+
+/* تصميم صورة Google */
+.google-signin img {
+  width: 50px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+/* النص "OR" */
+.or-text {
+  margin: 15px 0;
+  color: #ccc;
+}
+
+/* حقول الإدخال */
+.form-row {
+  margin: 10px 0;
+  width: 100%;
+  max-width: 400px; /* عرض الحقول */
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid transparent;
+  border-radius: 5px;
+  background-color: #2b1c40;
+  color: #fff;
+  outline: none;
+  transition: border 0.3s, box-shadow 0.3s;
+}
+
+input:focus {
+  border-color: #7a1c92;
+  box-shadow: 0 0 8px #7a1c92;
+  background-color: #3a2b50;
+}
+
+button {
+  width: 100%;
+  max-width: 400px;
+  padding: 10px;
+  background-color: #7a1c92;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #a628be;
+}
+
+.register-text {
+  margin-top: 15px;
+  color: #ccc;
+}
+
+.register-link {
+  color: red;
+  text-decoration: none;
+}
+
+.register-link:hover {
+  text-decoration: underline;
+}
+
+.login-text {
+  margin-top: 15px;
+  color: #ccc;
+}
+
+.login-link {
+  color: red;
+  text-decoration: none;
+}
