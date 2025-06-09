@@ -1,0 +1,25 @@
+<div class="settings-container">
+  <div class="top-bar">
+    <button class="close-btn" (click)="goHome()">✕</button>
+    <button class="save-btn">Save Changes</button>
+  </div>
+
+  <div class="profile-section">
+    <div class="avatar-wrapper">
+      <img [src]="userProfile.profilePictureUrl || '/assets/default-pro.jpeg'" alt="Profile" class="avatar" />
+      <label class="edit-icon">
+        <input type="file" hidden (change)="onProfilePictureSelected($event)" />
+        ✎
+      </label>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <input type="text" placeholder="Full Name" [(ngModel)]="userProfile.fullName" />
+    <input type="text" placeholder="User Name" [(ngModel)]="userProfile.userName" />
+    <input type="email" placeholder="email@gmail.com" [(ngModel)]="userProfile.email" disabled />
+
+    <button class="change-password-btn" (click)="goToSettings()">Change Password</button>
+
+  </div>
+</div>

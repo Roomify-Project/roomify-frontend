@@ -1,0 +1,98 @@
+.settings-container {
+  background-color: #1e0b25;
+  color: white;
+  height: 100vh;
+  padding: 2rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.top-bar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  right: 1rem;
+
+  .close-btn {
+    background: none;
+    color: white;
+    font-size: 1.5rem;
+    border: none;
+    cursor: pointer;
+  }
+
+  .save-btn {
+    background-color: #8e44ad;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+}
+
+.profile-section {
+  margin-top: 4rem;
+  .avatar-wrapper {
+    position: relative;
+    width: 120px;
+    height: 120px;
+
+    .avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .edit-icon {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background-color: #6c3483;
+      color: white;
+      border-radius: 50%;
+      padding: 0.3rem;
+      cursor: pointer;
+    }
+  }
+}
+
+.form-section {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 80%;
+
+  input {
+    background-color: #2e153f;
+    border: none;
+    padding: 0.8rem;
+    border-radius: 8px;
+    color: white;
+    font-size: 1rem;
+
+    &::placeholder {
+      color: #ccc;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+    }
+  }
+
+  .change-password-btn {
+    background-color: #2e153f;
+    color: white;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+}

@@ -1,0 +1,18 @@
+<div class="post-container">
+  <h2>إنشاء منشور جديد</h2>
+
+  <div class="form-group">
+    <label for="imageUpload">اختر صورة:</label>
+    <input type="file" id="imageUpload" (change)="onFileSelected($event)" accept="image/*">
+    <span *ngIf="selectedFile">تم اختيار: {{ selectedFile.name }}</span>
+  </div>
+
+  <div class="form-group">
+    <label for="description">الوصف:</label>
+    <textarea id="description" [(ngModel)]="description" rows="5" placeholder="اكتب وصفًا لمنشورك..."></textarea>
+  </div>
+
+  <button (click)="onUpload()" class="upload-button">رفع المنشور</button>
+
+  <button class="back-button" routerLink="/profile">العودة إلى الملف الشخصي</button>
+</div>

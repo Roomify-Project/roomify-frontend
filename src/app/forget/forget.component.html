@@ -1,0 +1,26 @@
+<div class="all">
+  <div class="animated-ball"></div>
+
+  <div class="reset-container">
+    <div class="reset-box">
+      <h2>Confirm E-mail</h2>
+      <p *ngIf="!isStepTwoVisible">Type your email to send verification code</p>
+
+      <form *ngIf="!isStepTwoVisible" (ngSubmit)="onSubmit()">
+        <input type="email" [(ngModel)]="email" placeholder="E-mail" required name="email" />
+        <button type="submit">Continue</button>
+      </form>
+
+      <!-- الخطوة الثانية -->
+      <div *ngIf="isStepTwoVisible">
+        <input type="text" [(ngModel)]="verificationCode" placeholder="Enter the verification code" name="verificationCode" required />
+        <input type="password" [(ngModel)]="newPassword" placeholder="Enter new password" name="newPassword" required />
+        <button (click)="confirmReset()">Confirm Reset</button>
+      </div>
+
+      <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
+      <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+    </div>
+  </div>
+</div>
+

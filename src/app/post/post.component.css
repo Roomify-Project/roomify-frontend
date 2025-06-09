@@ -1,0 +1,157 @@
+/* الألوان المستخدمة مباشرة */
+/*
+  الأبيض: #ffffff
+  رمادي فاتح جدًا: #e0e0e0
+  رمادي متوسط فاتح: #b0b0b0
+  أرجواني داكن: #1e002a
+  أرجواني متوسط: #3e0050
+  أرجواني فاتح: #8a00b0
+  أرجواني مميز: #a800d0
+  خلفية الدردشة: #2a003a
+  لون حدود: #330040
+  لون خلفية الإدخال: #2a003a
+*/
+
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #0d0014 !important; /* <--- إضافة !important */
+  color: #ffffff !important; /* <--- إضافة !important */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.post-container {
+  max-width: 600px;
+  width: 90%;
+  margin: 50px auto;
+  padding: 30px;
+  background-color: #1e002a !important; /* <--- إضافة !important */
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+  color: #ffffff !important; /* <--- إضافة !important */
+  border: 1px solid #330040 !important; /* <--- إضافة !important */
+  box-sizing: border-box;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #a800d0 !important; /* <--- إضافة !important */
+  font-size: 2em;
+  letter-spacing: 1px;
+  text-shadow: 0 0 8px rgba(168, 0, 208, 0.4);
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 1.15em;
+  color: #e0e0e0 !important; /* <--- إضافة !important */
+  font-weight: bold;
+}
+
+.form-group input[type="file"],
+.form-group textarea {
+  width: calc(100% - 24px);
+  padding: 12px;
+  border: 1px solid #330040 !important; /* <--- إضافة !important */
+  border-radius: 8px;
+  background-color: #2a003a !important; /* <--- إضافة !important */
+  color: #ffffff !important; /* <--- إضافة !important */
+  font-size: 1em;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input[type="file"]:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #a800d0 !important; /* <--- إضافة !important */
+  box-shadow: 0 0 0 3px rgba(168, 0, 208, 0.3);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.form-group input[type="file"] {
+  background-color: #2a003a !important; /* <--- إضافة !important */
+  cursor: pointer;
+}
+
+span {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.95em;
+  color: #b0b0b0 !important; /* <--- إضافة !important */
+  padding-left: 5px;
+}
+
+.upload-button {
+  display: block;
+  width: 100%;
+  padding: 15px 20px;
+  background-color: #a800d0 !important; /* <--- إضافة !important */
+  color: white !important; /* <--- إضافة !important */
+  border: none;
+  border-radius: 8px;
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 30px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.upload-button:hover {
+  background-color: #8a00b0 !important; /* <--- إضافة !important */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.upload-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.back-button {
+  display: block;
+  width: 100%;
+  padding: 12px 20px;
+  background-color: #3e0050 !important; /* <--- إضافة !important */
+  color: white !important; /* <--- إضافة !important */
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 15px;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.back-button:hover {
+  background-color: #52006a !important; /* <--- إضافة !important */
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+.back-button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .post-container {
+    margin: 20px !important; /* <--- إضافة !important */
+    padding: 20px !important; /* <--- إضافة !important */
+  }
+}

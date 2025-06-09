@@ -1,0 +1,81 @@
+<div class="chat-container">
+  <div class="sidebar">
+    <div class="app-logo">
+      <h1>ROOMIFY</h1>
+    </div>
+
+    <div
+      class="chat-preview"
+      *ngFor="let user of users"
+      (click)="selectUser(user)"
+      [class.selected]="selectedUser && selectedUser.id === user.id"
+    >
+      <img
+        [src]="user.profilePicture ? user.profilePicture : 'assets/profile.jpg'"
+        alt="User"
+      />
+      <div class="message-info">
+        <div class="name">{{ user.fullName || user.userName }}</div>
+        <div class="preview">{{ user.bio || 'لا يوجد وصف متاح' }}</div>
+      </div>
+      <div class="time">{{ user.lastMessageTime | date : 'shortTime' }}</div>
+    </div>
+  </div>
+
+  <div class="chat-window">
+    <p *ngIf="!selectedUser" class="no-chat-selected">
+      <img src="assets/roomify_logo_placeholder.png" alt="Roomify Logo" class="large-logo">
+      ابدأ الدردشة بتحديد مستخدم من القائمة الجانبية!
+    </p>
+
+    <div *ngIf="selectedUser" class="chat-content">
+      <div class="chat-header">
+        <div class="user-info">
+          <img
+            [src]="
+              selectedUser.profilePicture
+                ? selectedUser.profilePicture
+                : 'assets/profile.jpg'
+            "
+            alt="User"
+          />
+          <div class="username">
+            {{ selectedUser.fullName || selectedUser.userName }}
+          </div>
+        </div>
+        <div class="chat-header-icons">
+          <i class="fas fa-layer-group"></i> <i class="fas fa-magic"></i> <i class="fas fa-times" (click)="clearSelectedUser()"></i> </div>
+      </div>
+
+      <div class="chat-body">
+        <div class="message-separator">Yesterday</div>
+        <div
+          *ngFor="let message of messages"
+          [ngClass]="{
+            'my-message': message.sender === 'me',
+            'their-message': message.sender !== 'me'
+          }"
+        >
+          <div class="message-bubble">
+            {{ message.text }}
+            <div class="message-details">
+              <span class="time">{{ message.time | date : 'shortTime' }}</span>
+              <i *ngIf="message.sender === 'me'" class="fas fa-check-double read-receipt"></i> </div>
+          </div>
+        </div>
+        <div class="message-separator">Today</div>
+      </div>
+
+      <div class="chat-input">
+        <input
+          type="text"
+          placeholder="Type a message..."
+          [(ngModel)]="newMessage"
+          (keydown.enter)="sendMessage()"
+        />
+        <div class="input-icons">
+          <i class="fas fa-paper-plane send-icon" (click)="sendMessage()"></i> <i class="fas fa-paperclip"></i> <i class="fas fa-microphone"></i> </div>
+      </div>
+    </div>
+  </div>
+</div>

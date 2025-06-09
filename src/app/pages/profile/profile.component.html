@@ -1,0 +1,66 @@
+<app-navbar></app-navbar>
+
+<div class="animated-ball big-ball"></div>
+<div class="animated-ball small-ball"></div>
+
+<div class="container">
+
+  <aside class="sidebar">
+    <a class="settings-icon" routerLink="/settings">
+      <i class="bi bi-gear"></i>
+    </a>
+
+    <img class="avatar" src="./assets/avatar.png" alt="Profile">
+    <h2>{{ userName }}</h2>
+    <p class="username">{{ role }}</p>
+
+
+    <div class="followers">
+      <p>
+        <strong>
+          <a routerLink="/followers" style="text-decoration: none; color: white;">1.3k followers</a>
+        </strong>
+      </p>
+      <p>
+        <strong>
+          <a routerLink="/following" style="text-decoration: none; color: white;">45 following</a>
+        </strong>
+      </p>
+    </div>
+
+    <div class="actions">
+      <i class="bi bi-plus-circle" routerLink="/post"></i>
+      <i class="bi bi-heart" [class.liked]="isHeartLiked" (click)="toggleHeartLike()"></i>
+      <i class="bi bi-arrow-clockwise"></i>
+      <i class="bi bi-bookmark"></i>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <div class="gallery">
+      <div class="image-card" *ngFor="let post of posts">
+        <img [src]="post.imagePath" alt="Room">
+
+        <div class="post-description">
+          {{ post.description }}
+        </div>
+
+        <div class="image-options">
+          <i class="bi bi-three-dots-vertical" (click)="toggleOptions(post.id)"></i>
+
+          <div *ngIf="showOptions && selectedPostId === post.id" class="options-menu-horizontal">
+            <button (click)="downloadImage()" title="تنزيل">
+              <i class="bi bi-download"></i>
+            </button>
+            <button (click)="saveImage()" title="حفظ">
+              <i class="bi bi-bookmark-fill"></i>
+            </button>
+            <button (click)="deleteImage()" title="حذف">
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

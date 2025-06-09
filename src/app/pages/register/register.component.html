@@ -1,0 +1,54 @@
+<nav class="navbar">
+  <div class="logo">Roomify</div>
+</nav>
+
+<div class="all">
+
+<div class="container">
+  <h1>Sign up</h1>
+
+  <div class="google-login">
+    <a href="https://accounts.google.com" target="_blank" class="google-link">
+      <div class="google-icon">G</div>
+    </a>
+    <div class="divider">
+      <span></span>
+      <p>OR</p>
+      <span></span>
+    </div>
+  </div>
+
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div class="form-grid">
+      <div class="left">
+        <label>Full Name</label>
+        <input formControlName="fullName" type="text" placeholder="Full Name" required />
+
+        <label>User Name</label>
+        <input formControlName="username" type="text" placeholder="Username" required />
+        <p class="error" *ngIf="f['username']?.invalid && submitted">Username is required and must be alphanumeric</p>
+      </div>
+
+      <div class="right">
+        <label>E-mail</label>
+        <input formControlName="email" type="email" placeholder="Email" required />
+        <p class="error" *ngIf="f['email']?.invalid && submitted">Invalid email address</p>
+
+        <label>Password</label>
+        <input formControlName="password" type="password" placeholder="Password" required />
+        <p class="error" *ngIf="f['password']?.invalid && submitted">
+          Password must be at least 8 characters long and contain an uppercase letter, a lowercase letter, and a number
+        </p>
+      </div>
+    </div>
+    <br />
+    <p class="login">Already have an account? <a routerLink="/login">Log in</a></p>
+
+    <button type="submit" [disabled]="registerForm.invalid">Sign up</button>
+
+    <!-- عرض رسالة الخطأ إذا كانت موجودة -->
+    <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+  </form>
+</div>
+
+</div>

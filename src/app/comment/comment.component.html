@@ -1,0 +1,54 @@
+<div class="container py-4">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <button class="back-button" (click)="goBack()">
+        <i class="bi bi-arrow-left"></i>
+        العودة
+      </button>
+
+      <img [src]="postDetails?.imagePath || '/assets/room1.jpg'" class="main-img mb-3" alt="Room" />
+      <p class="post-description">{{ postDetails?.description }}</p>
+
+      <div id="comments-section">
+        <div class="d-flex align-items-center mb-3 comment-item" *ngFor="let comment of comments">
+          <img [src]="comment.userProfilePicture || '/assets/jojo.jpg'" class="user-img" alt="User" />
+          <div class="comment-content-wrapper flex-grow-1">
+            <strong>{{ comment.userName }}</strong>
+            <ng-container *ngIf="comment.isEditing; else viewMode">
+              <textarea class="form-control comment-edit-input" [(ngModel)]="comment.content"></textarea>
+              <div class="d-flex mt-2 justify-content-end">
+                <button class="btn btn-sm btn-success me-2" (click)="saveEditedComment(comment)">حفظ</button>
+                <button class="btn btn-sm btn-secondary" (click)="cancelEdit(comment)">إلغاء</button>
+              </div>
+            </ng-container>
+            <ng-template #viewMode>
+              <p class="mb-0">{{ comment.content }}</p>
+            </ng-template>
+          </div>
+
+          <div class="comment-actions" *ngIf="comment.userId === currentUser.id && !comment.isEditing">
+            <button class="btn btn-sm btn-edit me-2" (click)="editComment(comment)">
+              <i class="bi bi-pencil">UPDATE</i>
+            </button>
+            <button class="btn btn-sm btn-delete" (click)="deleteComment(comment.id)">
+              <i class="bi bi-trash">Delete</i>
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="comments.length === 0" class="no-comments-message">
+          لا توجد تعليقات بعد. كن أول من يعلق!
+        </div>
+      </div>
+
+      <div class="comment-box d-flex align-items-center mt-4">
+        <input type="text" id="commentInput" class="form-control comment-input me-2"
+               placeholder="Comment....." [(ngModel)]="newComment"
+               (keyup.enter)="addComment()">
+        <button class="send-btn icon-button" (click)="addComment()">
+          <i class="bi bi-send"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

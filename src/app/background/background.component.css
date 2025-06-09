@@ -1,0 +1,53 @@
+
+.background-container {
+  position: fixed; /* ثابت في الشاشة حتى مع التمرير */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  background: #280230;
+  overflow: hidden;
+  z-index: -1; /* خلف كل المحتوى */
+  pointer-events: none; /* لا تتفاعل مع أحداث الفأرة */
+}
+
+.animated-ball {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(8px);
+  pointer-events: none;
+}
+
+.big-ball {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(255, 0, 0, 0.2) 10%, rgba(255, 0, 0, 0) 70%);
+  animation: moveBall1 60s infinite alternate ease-in-out;
+  z-index: 100;
+}
+
+.small-ball {
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(255, 255, 0, 0.1) 10%, rgba(255, 255, 0, 0) 70%);
+  animation: moveBall2 45s infinite alternate ease-in-out;
+  z-index: 99;
+}
+
+/* الحركة */
+@keyframes moveBall1 {
+  0% { top: 10%; left: 10%; }
+  25% { top: 80%; left: 20%; }
+  50% { top: 50%; left: 90%; }
+  75% { top: 20%; left: 70%; }
+  100% { top: 90%; left: 40%; }
+}
+
+@keyframes moveBall2 {
+  0% { top: 90%; left: 90%; }
+  25% { top: 20%; left: 80%; }
+  50% { top: 50%; left: 10%; }
+  75% { top: 80%; left: 30%; }
+  100% { top: 10%; left: 60%; }
+}

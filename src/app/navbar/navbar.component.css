@@ -1,0 +1,141 @@
+/* تصميم شريط التنقل */
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css');
+
+.navbar {
+  background: linear-gradient(to right, #1a001f, #330033);
+  padding: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 10;
+}
+
+.logo a {
+  text-decoration: none;
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.logo a:hover {
+  color: #ffcc00;
+}
+
+.nav-icons {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.nav-icons i {
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.nav-icons i:hover {
+  color: #ffcc00;
+}
+
+/* صورة البروفايل */
+.profile-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid white;
+  object-fit: cover;
+  cursor: pointer;
+}
+
+/* القائمة المنسدلة */
+.profile-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 45px;
+  right: 0;
+  background: #50003c;
+  border-radius: 5px;
+  padding: 7px;
+  list-style: none;
+  min-width: 150px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+}
+
+.dropdown-menu li {
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 4px;
+}
+
+.dropdown-menu li:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-menu li i {
+  color: white;
+}
+
+.logout {
+  color: red;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  cursor: pointer;
+}
+
+.profile-dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+/* حاوية البحث */
+.search-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.search-icon {
+  font-size: 20px;
+  color: white;
+  cursor: pointer;
+}
+
+.search-box {
+  width: 0;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+  outline: none;
+  transition: width 0.4s ease-in-out, opacity 0.4s ease-in-out;
+  opacity: 0;
+  background: white;
+  color: black;
+  position: absolute;
+  right: 30px;
+}
+
+.search-container:focus-within .search-box {
+  width: 150px;
+  opacity: 1;
+  border: 1px solid #ccc;
+  padding-left: 10px;
+}

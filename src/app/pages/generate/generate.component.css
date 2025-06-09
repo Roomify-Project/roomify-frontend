@@ -1,0 +1,127 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: sans-serif;
+}
+.all {
+  background-color: #0d0215;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  display: flex;
+  justify-content: flex-start; /* بدلاً من center */
+  align-items: flex-start;     /* كمان نخليه يبدأ من فوق */
+  padding: 40px;               /* نضيف شوية مساحة من الجوانب */
+  box-sizing: border-box;
+}
+
+
+
+@keyframes moveBall {
+  0% { top: 10%; left: 10%; }
+  25% { top: 80%; left: 20%; }
+  50% { top: 50%; left: 90%; }
+  75% { top: 20%; left: 70%; }
+  100% { top: 90%; left: 40%; }
+}
+
+.main-content {
+  display: flex;
+  gap: 30px;
+  z-index: 1;
+  align-items: flex-start;
+}
+
+.container {
+  max-width: 600px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+}
+
+.btn-generate {
+  background-color: purple;
+  border: none;
+  padding: 10px 20px;
+  width: 100%;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+}
+
+.input-group-text {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+}
+
+.form-control {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+}
+
+.form-control:focus {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.btn-outline-light {
+  border-color: white;
+  color: white;
+}
+
+.btn-outline-light:hover {
+  background-color: #444;
+  color: white;
+}
+
+.sidebar-container {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  color: white;
+}
+.room-type-menu-right {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+  position: absolute;
+  top: 0;
+  left: 105%;
+  width: 300px;
+  z-index: 1000;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.room-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.room-option {
+  cursor: pointer;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 10px;
+  transition: 0.3s;
+  color: white;
+}
+
+.room-option:hover {
+  background-color: #444;
+}
+
+.room-option img {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+}

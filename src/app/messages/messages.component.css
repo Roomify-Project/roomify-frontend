@@ -1,0 +1,340 @@
+/* الألوان المستخدمة مباشرة */
+/*
+  الأبيض: #ffffff
+  رمادي فاتح جدًا: #e0e0e0
+  رمادي متوسط فاتح: #b0b0b0
+  أرجواني داكن: #1e002a
+  أرجواني متوسط: #3e0050
+  أرجواني فاتح: #8a00b0
+  أرجواني مميز: #a800d0
+  خلفية الدردشة: #2a003a
+  لون حدود: #330040
+  لون خلفية الإدخال: #2a003a
+*/
+
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #0d0014;
+}
+
+.chat-container {
+  display: flex;
+  height: 100vh;
+  background: linear-gradient(to right, #0d0014 0%, #1e002a 100%);
+  color: #ffffff; /* نص عام أبيض خالص */
+  overflow: hidden;
+}
+
+/* الشريط الجانبي */
+.sidebar {
+  width: 300px;
+  height: 100vh;
+  border-right: 1px solid #330040;
+  overflow-y: auto;
+  padding: 15px;
+  box-sizing: border-box;
+  background-color: #1e002a;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.app-logo {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #a800d0; /* الشعار بلون مميز */
+  text-align: center;
+  padding: 10px 0 20px;
+  letter-spacing: 2px;
+  text-shadow: 0 0 5px rgba(168, 0, 208, 0.5);
+}
+
+.chat-preview {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  cursor: pointer;
+  padding: 10px 12px;
+  border-radius: 10px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  background-color: #3e0050;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.chat-preview.selected {
+  background: #a800d0;
+  box-shadow: 0 0 15px rgba(168, 0, 208, 0.5);
+  transform: translateY(-2px);
+}
+
+.chat-preview:hover {
+  background-color: #8a00b0;
+  transform: translateY(-2px);
+}
+
+.chat-preview img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  margin-right: 15px;
+  object-fit: cover;
+  border: 2px solid #a800d0;
+}
+
+.message-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.name {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #ffffff; /* أسماء المستخدمين في الشريط الجانبي: أبيض خالص */
+}
+
+.preview {
+  font-size: 0.85rem;
+  color: #e0e0e0; /* معاينة الرسالة: رمادي فاتح جدًا */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
+
+.time {
+  font-size: 0.75rem;
+  color: #ffffff; /* الوقت في الشريط الجانبي: أبيض خالص */
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  white-space: nowrap;
+}
+
+/* نافذة المحادثة */
+.chat-window {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #1e002a;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at top left, rgba(138, 0, 176, 0.1), transparent 50%),
+              radial-gradient(circle at bottom right, rgba(168, 0, 208, 0.1), transparent 50%);
+}
+
+.no-chat-selected {
+  text-align: center;
+  padding: 50px;
+  color: #e0e0e0; /* رسالة "حدد مستخدمًا": رمادي فاتح */
+  font-size: 1.3rem;
+  margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100% - 150px);
+}
+
+.no-chat-selected .large-logo {
+  width: 120px;
+  height: 120px;
+  margin-bottom: 20px;
+  opacity: 0.6;
+}
+
+
+.chat-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.chat-header {
+  padding: 15px 20px;
+  border-bottom: 1px solid #330040;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #3e0050;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.chat-header .user-info img {
+  width: 45px;
+  height: 45px;
+  border: 2px solid #a800d0;
+}
+
+.chat-header .username {
+  font-weight: bold;
+  font-size: 1.3rem;
+  color: #ffffff; /* اسم المستخدم في رأس الدردشة: أبيض خالص */
+}
+
+.chat-header-icons i {
+  color: #e0e0e0; /* أيقونات رأس الدردشة: رمادي فاتح */
+  font-size: 1.3rem;
+  margin-left: 20px;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.chat-header-icons i:hover {
+  color: #a800d0;
+  transform: scale(1.1);
+}
+
+/* محادثات النص */
+.chat-body {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.message-separator {
+  text-align: center;
+  margin: 20px 0;
+  font-size: 0.85rem;
+  color: #b0b0b0; /* فواصل التاريخ: رمادي متوسط فاتح */
+  position: relative;
+  z-index: 1;
+}
+
+.message-separator::before,
+.message-separator::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background-color: #330040;
+}
+
+.message-separator::before {
+  left: 0;
+}
+
+.message-separator::after {
+  right: 0;
+}
+
+
+.my-message {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.their-message {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.message-bubble {
+  max-width: 65%;
+  padding: 12px 18px;
+  border-radius: 20px;
+  font-size: 1rem;
+  line-height: 1.4;
+  word-wrap: break-word;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.my-message .message-bubble {
+  background: linear-gradient(135deg, #8a00b0, #a800d0);
+  color: #ffffff; /* نص رسالتي: أبيض خالص */
+  border-bottom-right-radius: 5px;
+}
+
+.their-message .message-bubble {
+  background-color: #2a003a;
+  color: #ffffff; /* نص رسالة الطرف الآخر: أبيض خالص */
+  border-bottom-left-radius: 5px;
+}
+
+.message-details {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  margin-top: 5px;
+  font-size: 0.7rem;
+}
+
+.their-message .message-details {
+  justify-content: flex-start;
+}
+
+.message-bubble .time {
+  font-size: 0.7rem;
+  color: #ffffff; /* الوقت داخل فقاعة الرسالة: أبيض خالص */
+  position: static;
+  margin-left: 0;
+}
+
+.read-receipt {
+  color: #33cc33;
+  font-size: 0.65rem;
+  margin-left: 5px;
+}
+
+/* صندوق الإدخال */
+.chat-input {
+  padding: 15px 20px;
+  border-top: 1px solid #330040;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background-color: #3e0050;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.chat-input input[type="text"] {
+  flex-grow: 1;
+  padding: 12px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 25px;
+  outline: none;
+  background-color: #2a003a;
+  color: #ffffff; /* نص حقل الإدخال: أبيض خالص */
+  transition: background-color 0.3s ease;
+}
+
+.chat-input input[type="text"]::placeholder {
+  color: #e0e0e0; /* نص المربع الوهمي في حقل الإدخال: رمادي فاتح */
+}
+
+.chat-input input[type="text"]:focus {
+  background-color: #38004a;
+}
+
+.input-icons {
+  display: flex;
+  gap: 15px;
+}
+
+.input-icons i {
+  color: #e0e0e0; /* أيقونات الإدخال: رمادي فاتح */
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.input-icons i:hover {
+  color: #a800d0;
+  transform: scale(1.1);
+}
+
+.send-icon {
+  color: #a800d0 !important;
+  font-size: 1.5rem !important;
+}

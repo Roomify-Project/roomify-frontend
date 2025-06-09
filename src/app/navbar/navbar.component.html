@@ -1,0 +1,34 @@
+<!-- navbar.component.html -->
+
+<nav class="navbar">
+  <div class="logo">
+    <a routerLink="/home">ROOMIFY</a>
+  </div>
+
+  <div class="nav-icons">
+    <div class="search-container">
+      <label for="searchBox" class="search-icon">
+        <i class="bi bi-search"></i>
+      </label>
+      <input type="text" id="searchBox" class="search-box" placeholder="Search ... ">
+    </div>
+
+   <a routerLink="/home"> <i class="bi bi-layers"></i></a>
+    <a routerLink="/generate"><i class="bi bi-brush"></i></a>
+
+    <div class="profile-dropdown">
+      <button class="profile-btn">
+        <img src="/assets/avatar.png" alt="Profile" class="profile-img">
+      </button>
+
+      <ul class="dropdown-menu">
+        <a routerLink="/register"><li><i class="bi bi-person-plus-fill"></i> Sign up</li></a>
+        <a routerLink="/profile"><li><i class="bi bi-person"></i> Profile</li></a>
+        <a routerLink="/settings"><li><i class="bi bi-gear"></i> Settings</li></a>
+        <a routerLink="/notifications"><li><i class="bi bi-bell"></i> Notifications</li></a>
+        <a routerLink="/messages"><li><i class="bi bi-chat-dots"></i> Messages</li></a>
+        <a routerLink="/login"><li class="logout">Log out</li></a>
+      </ul>
+    </div>
+  </div>
+</nav>

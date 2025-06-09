@@ -1,0 +1,146 @@
+/* نافبار */
+.navbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 15px 30px;
+  background-color: #430d58;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #f8f8f8;
+  letter-spacing: 1px;
+}
+
+/* الحاوية العامة */
+.all {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 80px; /* علشان navbar */
+   z-index: 1000;
+}
+
+.container {
+  width: 600px;
+  text-align: center;
+   z-index: 1000;
+
+}
+
+h1 {
+  font-size: 32px;
+  margin-bottom: 20px;
+  color: white;
+}
+p{
+  color: white;
+}
+
+.google-icon {
+  font-size: 40px;
+  color: #4285F4;
+  margin-bottom: 10px;
+}
+
+.google-link {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  text-decoration: none;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.divider span {
+  flex: 1;
+  height: 2px;
+  background-color: #167c6b;
+  margin: 0 10px;
+}
+
+.form-grid {
+  display: flex;
+  gap: 100px;
+  justify-content: space-between;
+}
+
+.left, .right {
+  width: 80%;
+  text-align: left;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  color: #ffffff;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  background-color: #222;
+  border-radius: 20px;
+  border: none;
+  color: white;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+input:disabled {
+  opacity: 0.6;
+}
+
+.login a {
+  color: red;
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* زر التسجيل */
+button {
+  margin-top: 15px;
+  padding: 12px 30px;
+  border: none;
+  background-color: #ff4d4f;
+  color: white;
+  border-radius: 25px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s;
+}
+
+button:hover {
+  background-color: #e63b3d;
+  transform: translateY(-2px);
+}
+
+
+/* رسائل الخطأ */
+.error {
+  font-size: 13px;
+  color: #ff4d4f;
+  margin-bottom: 10px;
+  background-color: rgba(255, 77, 79, 0.1);
+  padding: 6px 12px;
+  border-left: 4px solid #ff4d4f;
+  border-radius: 8px;
+}

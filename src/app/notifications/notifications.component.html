@@ -1,0 +1,53 @@
+<div class="notifications-container">
+  <h1 class="notifications-header">إشعاراتك</h1>
+
+  <!-- زر تعليم الكل كمقروء -->
+  <div class="mark-all-container">
+    <button
+      class="mark-all-button"
+      (click)="markAllAsRead()"
+      [disabled]="isMarkingAllAsRead || isLoading || !hasUnreadNotifications"
+    >
+      <ng-container *ngIf="!isMarkingAllAsRead">
+        <i class="fas fa-check-double"></i> تعليم الكل كمقروء
+      </ng-container>
+      <ng-container *ngIf="isMarkingAllAsRead">
+        <span class="spinner-small"></span> جاري التعليم...
+      </ng-container>
+    </button>
+  </div>
+
+  <!-- مؤشر التحميل -->
+  <div *ngIf="isLoading" class="loading-message">
+    جاري تحميل الإشعارات... <span class="spinner"></span>
+  </div>
+
+  <!-- عرض رسالة الخطأ -->
+  <div *ngIf="errorMessage" class="error-message">
+    <i class="fas fa-exclamation-triangle"></i> {{ errorMessage }}
+  </div>
+
+  <!-- عرض رسالة إذا لم يتم العثور على إشعارات -->
+  <div *ngIf="!isLoading && !errorMessage && notifications.length === 0" class="no-notifications-message">
+    <i class="far fa-bell-slash"></i> لا توجد إشعارات جديدة.
+  </div>
+
+  <!-- قائمة الإشعارات -->
+  <div *ngIf="!isLoading && !errorMessage && notifications.length > 0" class="notifications-list">
+    <div
+      *ngFor="let notification of notifications"
+      class="notification-item"
+      [class.unread]="!notification.isRead"
+      (click)="markAsRead(notification)"
+    >
+      <div class="notification-content">
+        <p class="notification-message">{{ notification.message }}</p>
+        <div class="notification-meta">
+          <span class="notification-type"><i class="fas fa-tag"></i> {{ notification.type }}</span>
+          <span class="notification-date"><i class="fas fa-clock"></i> {{ formatDate(notification.createdAt) }}</span>
+        </div>
+      </div>
+      <div *ngIf="!notification.isRead" class="unread-indicator" title="غير مقروء"></div>
+    </div>
+  </div>
+</div>

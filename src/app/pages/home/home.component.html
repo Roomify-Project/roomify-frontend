@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROOMIFY</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+</head>
+<body>
+
+ <div class="background-container">
+    <div class="animated-ball big-ball"></div>
+    <div class="animated-ball small-ball"></div>
+  </div>
+
+
+<!--شريط التنقل -->
+<nav class="navbar">
+    <div class="logo">
+        <a href="index.html">ROOMIFY</a>
+    </div>
+
+    <div class="nav-icons">
+         <!-- حاوية البحث -->
+         <div class="search-container">
+            <label for="searchBox" class="search-icon">
+                <i class="bi bi-search"></i>
+            </label>
+            <input type="text" id="searchBox" class="search-box" placeholder="Search ... ">
+        </div>
+
+        <i class="bi bi-layers"></i>
+        <a routerLink="/generate"><i class="bi bi-brush"></i></a>
+
+
+        <!-- صورة البروفايل -->
+        <div class="profile-dropdown">
+            <button class="profile-btn">
+                <img src="/assets/avatar.png" alt="Profile" class="profile-img">
+            </button>
+
+            <!-- القائمة المنسدلة -->
+         <ul class="dropdown-menu">
+  <a [routerLink]="['/register']"><li><i class="bi bi-person-plus-fill"></i> Sign up</li></a>
+  <a routerLink="/profile"><li><i class="bi bi-person"></i> Profile</li></a>
+  <a [routerLink]="['/settings']"><li><i class="bi bi-gear"></i> Settings</li></a>
+  <a [routerLink]="['/register']"><li><i class="bi bi-bell"></i> Notifications</li></a>
+  <a [routerLink]="['/messages']"><li><i class="bi bi-chat-dots"></i> Messages</li></a>
+  <a [routerLink]="['/login']"><li class="logout">Log out</li></a>
+</ul>
+
+        </div>
+    </div>
+</nav>
+
+<div class="gallery">
+  <div class="image-card" *ngFor="let post of posts">
+    <a [routerLink]="['/comment', post.id]"> <img [src]="post.imagePath" alt="Room">
+    </a>
+    <span class="description-text">{{ post.description }}</span>
+    <img src="/assets/avatar.png" alt="User" class="user-icon">
+  </div>
+</div>
+
+
+</body>
+</html>
+
+
