@@ -1,8 +1,10 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core'; // **أضف OnDestroy**
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { NavbarComponent } from "../../navbar/navbar.component";
 import { CommonModule } from '@angular/common';
+import { Subscription } from 'rxjs'; // **لاستخدام الاشتراك وإلغائه**
+import { PostRefreshService } from '../../services/post-refresh.service';
 
 interface PortfolioPost {
   id: string;
@@ -21,25 +23,42 @@ interface PortfolioPost {
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent implements OnInit {
-  userName: string = 'User Name'; // قيمة مبدئية، سيتم تحديثها من localStorage
-  role: string = 'InteriorDesigner'; // ممكن تجيبها من localStorage لو الـ API بيرجعها
+export class ProfileComponent implements OnInit, OnDestroy { // **طبق الواجهة OnDestroy**
+  userName: string = 'User Name';
+  role: string = 'InteriorDesigner';
   posts: PortfolioPost[] = [];
   isHeartLiked: boolean = false;
   selectedPostId: string | null = null;
   showOptions: boolean = false;
 
   private http = inject(HttpClient);
+  private postRefreshService = inject(PostRefreshService); // **حقن (Inject) الخدمة الجديدة**
+  private postRefreshSubscription!: Subscription; // **متغير للاحتفاظ بالاشتراك**
 
   ngOnInit() {
+    this.loadUserProfileAndPosts(); // تحميل البيانات الأولية عند بدء تشغيل المكون
+
+    // **الاشتراك في إشعارات رفع المنشورات**
+    this.postRefreshSubscription = this.postRefreshService.postUploaded$.subscribe(() => {
+      this.loadUserProfileAndPosts(); // إعادة جلب المنشورات عند تلقي إشعار
+    });
+  }
+
+  // **دالة ngOnDestroy لتنظيف الاشتراك ومنع تسرب الذاكرة**
+  ngOnDestroy() {
+    if (this.postRefreshSubscription) {
+      this.postRefreshSubscription.unsubscribe(); // إلغاء الاشتراك عند تدمير المكون
+    }
+  }
+
+  // **دالة جديدة لجلب بيانات المستخدم والمنشورات**
+  loadUserProfileAndPosts() {
     // جلب اسم المستخدم من localStorage
     const storedUserName = localStorage.getItem('userName');
     if (storedUserName) {
       this.userName = storedUserName;
     } else {
       console.warn('اسم المستخدم غير موجود في localStorage. يرجى التأكد من تسجيل الدخول أولاً.');
-      // هنا ممكن تضيف توجيه لصفحة تسجيل الدخول لو اسم المستخدم مش موجود
-      // this.router.navigate(['/login']); // لو عندك Router service هنا
     }
 
     const token = localStorage.getItem('token') || '';
@@ -125,8 +144,11 @@ export class ProfileComponent implements OnInit {
         next: (res) => {
           console.log('تم حذف البوست بنجاح:', res);
           alert('تم حذف البوست بنجاح.');
+          // بعد الحذف، أزل المنشور من القائمة محلياً
           this.posts = this.posts.filter(post => post.id !== this.selectedPostId);
           this.selectedPostId = null;
+          // **أخبر الخدمة بأن المنشورات قد تغيرت (للتأكد من التناسق)**
+          this.postRefreshService.notifyPostUploaded();
         },
         error: (err) => {
           console.error('حدث خطأ أثناء حذف البوست:', err);

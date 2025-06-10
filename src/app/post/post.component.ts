@@ -1,31 +1,30 @@
 import { Component, inject } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http'; // استيراد HttpClient و HttpHeaders
-import { CommonModule } from '@angular/common'; // لـ ngIf و ngFor (إذا احتجت)
-import { FormsModule } from '@angular/forms'; // **مهم جداً لـ [(ngModel)]**
-import { Router } from '@angular/router'; // لاستخدامه في التوجيه بعد الرفع
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { PostRefreshService } from '../services/post-refresh.service';
 
 @Component({
   selector: 'app-post',
-  standalone: true, // تأكد من أنها مستقلة
+  standalone: true,
   imports: [
-    CommonModule, // أضف CommonModule
-    FormsModule // **أضف FormsModule هنا**
+    CommonModule,
+    FormsModule
   ],
   templateUrl: './post.component.html',
-  styleUrl: './post.component.css' // تم تغييرها من styleUrls إلى styleUrl في Angular 17+
+  styleUrl: './post.component.css'
 })
 export class PostComponent {
-  // متغيرات لتخزين بيانات النموذج
   selectedFile: File | null = null;
   description: string = '';
-  // يمكنك الحصول على هذا من خدمة المصادقة أو localStorage
-  applicationUserId: string = 'fe72adca-8d75-43e1-f750-08dd9d2dd006';
+  // لم نعد بحاجة لتعريف applicationUserId هنا كقيمة ثابتة
+  // applicationUserId: string = 'fe72adca-8d75-43e1-f750-08dd9d2dd006'; // هذا السطر يجب حذفه أو التعليق عليه
 
-  // حقن HttpClient و Router
   private http = inject(HttpClient);
   private router = inject(Router);
+  private postRefreshService = inject(PostRefreshService);
 
-  // دالة تُستدعى عند اختيار ملف
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -35,7 +34,6 @@ export class PostComponent {
     }
   }
 
-  // دالة تُستدعى عند النقر على زر الرفع
   onUpload() {
     if (!this.selectedFile) {
       alert('الرجاء اختيار صورة لرفعها.');
@@ -47,30 +45,42 @@ export class PostComponent {
       return;
     }
 
-    // الحصول على التوكن من localStorage (افترض أنه مخزن هناك بعد تسجيل الدخول)
     const token = localStorage.getItem('token') || '';
     if (!token) {
       alert('لا يوجد توكن مصادقة. الرجاء تسجيل الدخول.');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    // **** التعديل الرئيسي هنا: جلب الـ userId من localStorage ****
+    const applicationUserId = localStorage.getItem('userId');
+    if (!applicationUserId) {
+      alert('معرف المستخدم غير موجود في localStorage. الرجاء تسجيل الدخول.');
       this.router.navigate(['/login']); // أو أي مسار لصفحة تسجيل الدخول
       return;
     }
 
-    // إنشاء FormData لإرسال الملف والبيانات الأخرى
     const formData = new FormData();
     formData.append('ImageFile', this.selectedFile, this.selectedFile.name);
     formData.append('Description', this.description);
-    formData.append('ApplicationUserId', this.applicationUserId);
+    // استخدم applicationUserId الذي تم جلبه من localStorage
+    formData.append('ApplicationUserId', applicationUserId);
 
-    // إرسال طلب الـ POST
-    // لاحظ أن الـ Content-Type لا يتم تعيينه يدوياً عند استخدام FormData، المتصفح يقوم بذلك
+    // عنوان الـ API يجب أن يكون متناسقاً مع الـ userId الذي نستخدمه
+    // لاحظ أنك حالياً تستخدم userId ثابت في الـ URL هنا أيضاً:
+    // 'http://roomify0.runasp.net/api/PortfolioPost/upload/fe72adca-8d75-43e1-f750-08dd9d2dd006'
+    // يجب أن يصبح ديناميكياً أيضاً باستخدام applicationUserId
+    const uploadUrl = `http://roomify0.runasp.net/api/PortfolioPost/upload/${applicationUserId}`;
+
+
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    this.http.post('http://roomify0.runasp.net/api/PortfolioPost/upload/fe72adca-8d75-43e1-f750-08dd9d2dd006', formData, { headers })
+    this.http.post(uploadUrl, formData, { headers }) // استخدم uploadUrl الديناميكي
       .subscribe({
         next: (response) => {
           console.log('تم الرفع بنجاح:', response);
           alert('تم رفع الصورة بنجاح!');
-          // التوجيه إلى صفحة الملف الشخصي بعد الرفع الناجح
+          this.postRefreshService.notifyPostUploaded();
           this.router.navigate(['/profile']);
         },
         error: (error) => {
