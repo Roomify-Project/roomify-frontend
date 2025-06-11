@@ -17,7 +17,7 @@ export class SplashComponent implements OnInit {
     this.startTyping();
 
     setTimeout(() => {
-      this.router.navigate(['/home']);
+      this.router.navigate(['/login']);
     }, 5000); // خلي وقت النقل بعد انتهاء الكتابة
   }
 

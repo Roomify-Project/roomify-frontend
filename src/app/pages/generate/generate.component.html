@@ -13,11 +13,13 @@
       </div>
 
       <div class="mb-3 d-flex flex-column align-items-center">
-        <button class="btn btn-outline-light w-100 mb-2" (click)="toggleSidebar()">➕ Add room images</button>
-        <input type="file" id="roomImages" accept="image/*" multiple style="display: none;">
+        <button class="btn btn-outline-light w-100 mb-2" (click)="fileInput.click()">
+          ➕ Upload Room Image (Optional)
+        </button>
+        <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" style="display: none;">
+        <span *ngIf="selectedFile" class="text-white mt-1">Selected file: {{ selectedFile.name }}</span>
       </div>
 
-      <!-- Room Type Selector -->
       <div class="mb-3 position-relative">
         <div class="input-group">
           <span class="input-group-text">🏠</span>
@@ -33,11 +35,9 @@
               <span>{{ type.name }}</span>
             </div>
           </div>
-          <button class="btn btn-generate mt-2" (click)="toggleRoomTypeMenu()">Save</button>
-        </div>
+          </div>
       </div>
 
-      <!-- Design Style Selector -->
       <div class="mb-3 position-relative">
         <div class="input-group">
           <span class="input-group-text">🎨</span>
@@ -53,8 +53,7 @@
               <span>{{ style.name }}</span>
             </div>
           </div>
-          <button class="btn btn-generate mt-2" (click)="toggleDesignStyleMenu()">Save</button>
-        </div>
+          </div>
       </div>
 
       <button class="btn-generate" (click)="generateDesign()" [disabled]="isLoading">
@@ -64,10 +63,10 @@
       <div *ngIf="generatedImageUrl" class="mt-4 text-center">
         <h5>Generated Design:</h5>
         <img [src]="generatedImageUrl" alt="Generated Room" class="img-fluid rounded" style="max-width: 100%; height: auto;">
+        <button class="btn btn-success mt-3" (click)="downloadImage()">Download Image</button>
       </div>
     </div>
 
-    <!-- Sidebar -->
     <div *ngIf="showSidebar" class="sidebar-container">
       <button class="btn-close btn-close-white float-end" aria-label="Close" (click)="toggleSidebar()"></button>
       <h5>Upload furniture images</h5>

@@ -1,26 +1,18 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class RoomImageService {
-  private baseUrl = 'http://roomify0.runasp.net/api/RoomImage';
+  // هذا هو رابط الـ API الخاص بك الذي يستقبل طلبات التصميم
+  private apiUrl = 'http://roomify0.runasp.net/api/RoomImage/generate-design';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  generateDesign(prompt: string, roomType: string, style: string) {
-    return this.http.post(`${this.baseUrl}/generate-design`, { prompt, roomType, style });
-  }
-
-  saveDesign(data: any) {
-    return this.http.post(`${this.baseUrl}/save-design`, data);
-  }
-
-  getSavedDesigns(userId: string) {
-    return this.http.get(`${this.baseUrl}/saved-designs/${userId}`);
-  }
-
-  downloadImage(imageUrl: string) {
-    const params = new HttpParams().set('imageUrl', imageUrl);
-    return this.http.get(`${this.baseUrl}/download`, { params, responseType: 'blob' });
+  // هذه الدالة ترسل كائن FormData الذي يحتوي على الصورة والنصوص
+  generateDesign(formData: FormData): Observable<any> {
+    return this.http.post(this.apiUrl, formData);
   }
 }
