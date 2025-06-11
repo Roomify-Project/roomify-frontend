@@ -10,7 +10,7 @@ export class AuthService {
   // لاحظ إن الـ URL اللي مديهولي في الكومبوننت كان 'http://roomify0.runasp.net/api/Auth'
   // وهنا 'http://roomify.runasp.net/api/Auth'
   // لازم يكونوا واحد عشان مفيش مشاكل CORS
-  private baseUrl = 'http://roomify0.runasp.net/api/Auth'; // استخدم ده الأفضل بناءً على الكود اللي فات
+  private baseUrl = 'http://roomify.runasp.net/api/Auth'; // استخدم ده الأفضل بناءً على الكود اللي فات
 
   constructor(private http: HttpClient) {}
 

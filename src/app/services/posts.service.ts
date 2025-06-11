@@ -18,7 +18,7 @@ export interface Post {
 })
 export class PostsService {
   // ✳️ تأكد من الـ URL الصحيح هنا
-  private apiUrl = 'http://roomify0.runasp.net/api/PortfolioPost/'; // ✳️ يفضل يكون نفس الـ Base URL بتاعك
+  private apiUrl = 'http://roomify.runasp.net/api/PortfolioPost/'; // ✳️ يفضل يكون نفس الـ Base URL بتاعك
 
   // ✳️ BehaviorSubject للاحتفاظ بقائمة البوستات الحالية وإبلاغ المشتركين بالتغييرات
   private _posts = new BehaviorSubject<Post[]>([]);

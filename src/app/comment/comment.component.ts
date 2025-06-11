@@ -123,7 +123,8 @@ export class CommentComponent implements OnInit {
     console.log('جلب التعليقات للمنشور بمعرف:', this.postId, 'مع التوكن (جزئي):', token.substring(0, 30) + '...');
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    const commentsApiUrl = `http://roomify0.runasp.net/api/Comments/post/${this.postId}`;
+    // ⭐️ التعديل تم هنا: استخدام query parameter بدلاً من path segment
+    const commentsApiUrl = `http://roomify0.runasp.net/api/Comments?postId=${this.postId}`;
 
     this.http.get<Comment[]>(commentsApiUrl, { headers }).subscribe({
       next: (data) => {
@@ -152,7 +153,7 @@ export class CommentComponent implements OnInit {
     const token = localStorage.getItem('token') || '';
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    const postApiUrl = `http://roomify0.runasp.net/api/PortfolioPost/${postId}`;
+    const postApiUrl = `http://roomify.runasp.net/api/PortfolioPost/${postId}`;
 
     this.http.get<PostDetails>(postApiUrl, { headers }).subscribe({
       next: (data) => {
@@ -181,10 +182,12 @@ export class CommentComponent implements OnInit {
       const token = localStorage.getItem('token') || '';
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-      const addCommentApiUrl = `http://roomify0.runasp.net/api/Comments?userId=${this.currentUser.id}`;
+      // ⭐️⭐️⭐️ التعديل الحاسم هنا: إزالة userId من URL وإضافته إلى حمولة الطلب ⭐️⭐️⭐️
+      const addCommentApiUrl = `http://roomify0.runasp.net/api/Comments`; // لا يوجد ?userId هنا
 
       const commentPayload = {
         content: this.newComment.trim(),
+        userId: this.currentUser.id, // ✳️ تم التأكد من أن userId موجود هنا في الـ payload
         PortfolioPostId: this.postId
       };
       console.log('حمولة التعليق المرسلة:', commentPayload);
@@ -243,7 +246,7 @@ export class CommentComponent implements OnInit {
     const token = localStorage.getItem('token') || '';
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    const updateCommentApiUrl = `http://roomify0.runasp.net/api/Comments/${comment.id}?userId=${this.currentUser.id}`;
+    const updateCommentApiUrl = `http://roomify.runasp.net/api/Comments/${comment.id}?userId=${this.currentUser.id}`;
     const updatePayload = {
       content: comment.content.trim()
     };
@@ -285,7 +288,7 @@ export class CommentComponent implements OnInit {
     const token = localStorage.getItem('token') || '';
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-    const deleteCommentApiUrl = `http://roomify0.runasp.net/api/Comments/${commentId}?userId=${this.currentUser.id}`;
+    const deleteCommentApiUrl = `http://roomify.runasp.net/api/Comments/${commentId}?userId=${this.currentUser.id}`;
     console.log('حذف التعليق:', commentId);
     console.log('عنوان الـ API لحذف التعليق:', deleteCommentApiUrl);
 

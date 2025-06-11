@@ -70,7 +70,7 @@ export class PostComponent {
     // لاحظ أنك حالياً تستخدم userId ثابت في الـ URL هنا أيضاً:
     // 'http://roomify0.runasp.net/api/PortfolioPost/upload/fe72adca-8d75-43e1-f750-08dd9d2dd006'
     // يجب أن يصبح ديناميكياً أيضاً باستخدام applicationUserId
-    const uploadUrl = `http://roomify0.runasp.net/api/PortfolioPost/upload/${applicationUserId}`;
+    const uploadUrl = `http://roomify.runasp.net/api/PortfolioPost/upload/${applicationUserId}`;
 
 
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);

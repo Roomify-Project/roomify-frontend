@@ -73,7 +73,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
       // جلب منشورات المستخدم
       this.http.get<PortfolioPost[]>(
-        `http://roomify0.runasp.net/api/PortfolioPost/by-user/${userId}`,
+        `http://roomify.runasp.net/api/PortfolioPost/by-user/${userId}`,
         { headers }
       ).subscribe({
         next: (res) => {
@@ -87,7 +87,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
       // جلب أعداد المتابعين ومن يتابعهم
       this.http.get<FollowCounts>(
-        `http://roomify0.runasp.net/api/follow/counts/${userId}`, // استخدام الـ userId في رابط الـ API
+        `http://roomify.runasp.net/api/follow/counts/${userId}`, // استخدام الـ userId في رابط الـ API
         { headers }
       ).subscribe({
         next: (res) => {
@@ -156,7 +156,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    const deleteUrl = `http://roomify0.runasp.net/api/PortfolioPost/${this.selectedPostId}`;
+    const deleteUrl = `http://roomify.runasp.net/api/PortfolioPost/${this.selectedPostId}`;
 
     if (confirm('هل أنت متأكد أنك تريد حذف هذا البوست؟')) {
       this.http.delete(deleteUrl, { headers }).subscribe({
