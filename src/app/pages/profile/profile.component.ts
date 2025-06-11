@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core'; // **أضف OnDestroy**
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { NavbarComponent } from "../../navbar/navbar.component";
 import { CommonModule } from '@angular/common';
-import { Subscription } from 'rxjs'; // **لاستخدام الاشتراك وإلغائه**
+import { Subscription } from 'rxjs';
 import { PostRefreshService } from '../../services/post-refresh.service';
 
 interface PortfolioPost {
@@ -16,6 +16,12 @@ interface PortfolioPost {
   ownerProfilePicture: string | null;
 }
 
+// واجهة جديدة لاستقبال بيانات أعداد المتابعين
+interface FollowCounts {
+  followers: number;
+  following: number;
+}
+
 @Component({
   selector: 'app-profile',
   standalone: true,
@@ -23,37 +29,35 @@ interface PortfolioPost {
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
-export class ProfileComponent implements OnInit, OnDestroy { // **طبق الواجهة OnDestroy**
+export class ProfileComponent implements OnInit, OnDestroy {
   userName: string = 'User Name';
   role: string = 'InteriorDesigner';
   posts: PortfolioPost[] = [];
   isHeartLiked: boolean = false;
   selectedPostId: string | null = null;
   showOptions: boolean = false;
+  // خصائص جديدة لتخزين أعداد المتابعين ومن يتابعهم
+  followersCount: number = 0;
+  followingCount: number = 0;
 
   private http = inject(HttpClient);
-  private postRefreshService = inject(PostRefreshService); // **حقن (Inject) الخدمة الجديدة**
-  private postRefreshSubscription!: Subscription; // **متغير للاحتفاظ بالاشتراك**
+  private postRefreshService = inject(PostRefreshService);
+  private postRefreshSubscription!: Subscription;
 
   ngOnInit() {
-    this.loadUserProfileAndPosts(); // تحميل البيانات الأولية عند بدء تشغيل المكون
-
-    // **الاشتراك في إشعارات رفع المنشورات**
+    this.loadUserProfileAndPosts();
     this.postRefreshSubscription = this.postRefreshService.postUploaded$.subscribe(() => {
-      this.loadUserProfileAndPosts(); // إعادة جلب المنشورات عند تلقي إشعار
+      this.loadUserProfileAndPosts();
     });
   }
 
-  // **دالة ngOnDestroy لتنظيف الاشتراك ومنع تسرب الذاكرة**
   ngOnDestroy() {
     if (this.postRefreshSubscription) {
-      this.postRefreshSubscription.unsubscribe(); // إلغاء الاشتراك عند تدمير المكون
+      this.postRefreshSubscription.unsubscribe();
     }
   }
 
-  // **دالة جديدة لجلب بيانات المستخدم والمنشورات**
   loadUserProfileAndPosts() {
-    // جلب اسم المستخدم من localStorage
     const storedUserName = localStorage.getItem('userName');
     if (storedUserName) {
       this.userName = storedUserName;
@@ -62,25 +66,40 @@ export class ProfileComponent implements OnInit, OnDestroy { // **طبق الو�
     }
 
     const token = localStorage.getItem('token') || '';
-    // **** التعديل الرئيسي هنا: جلب الـ userId من localStorage ****
-    const userId = localStorage.getItem('userId');
+    const userId = localStorage.getItem('userId'); // جلب الـ userId من localStorage
 
-    if (userId && token) { // التأكد إن الـ userId موجود قبل ما تعمل الـ request
+    if (userId && token) {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
+      // جلب منشورات المستخدم
       this.http.get<PortfolioPost[]>(
-        `http://roomify0.runasp.net/api/PortfolioPost/by-user/${userId}`, // استخدام الـ userId اللي تم جلبه من localStorage
+        `http://roomify0.runasp.net/api/PortfolioPost/by-user/${userId}`,
         { headers }
       ).subscribe({
         next: (res) => {
           this.posts = res;
-          console.log('البيانات المستلمة:', this.posts);
-          // هنا مش محتاجين نعتمد على ownerUserName من البوستات طالما جبناه من localStorage
+          console.log('البيانات المستلمة (المنشورات):', this.posts);
         },
         error: (err) => {
           console.error('حدث خطأ في تحميل الصور:', err);
         }
       });
+
+      // جلب أعداد المتابعين ومن يتابعهم
+      this.http.get<FollowCounts>(
+        `http://roomify0.runasp.net/api/follow/counts/${userId}`, // استخدام الـ userId في رابط الـ API
+        { headers }
+      ).subscribe({
+        next: (res) => {
+          this.followersCount = res.followers;
+          this.followingCount = res.following;
+          console.log('أعداد المتابعين المستلمة:', res);
+        },
+        error: (err) => {
+          console.error('حدث خطأ أثناء جلب أعداد المتابعين:', err);
+        }
+      });
+
     } else {
       console.warn('توكن أو معرف المستخدم غير موجود. الرجاء تسجيل الدخول.');
     }
@@ -144,10 +163,8 @@ export class ProfileComponent implements OnInit, OnDestroy { // **طبق الو�
         next: (res) => {
           console.log('تم حذف البوست بنجاح:', res);
           alert('تم حذف البوست بنجاح.');
-          // بعد الحذف، أزل المنشور من القائمة محلياً
           this.posts = this.posts.filter(post => post.id !== this.selectedPostId);
           this.selectedPostId = null;
-          // **أخبر الخدمة بأن المنشورات قد تغيرت (للتأكد من التناسق)**
           this.postRefreshService.notifyPostUploaded();
         },
         error: (err) => {

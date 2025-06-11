@@ -8,13 +8,10 @@
 </head>
 <body>
 
-  <!-- ========== Navbar ========== -->
   <header class="navbar">
     <div class="logo">
       <a href="index.html">ROOMIFY</a>
     </div>
-
-
 
     <div class="nav-right">
       <div class="nav-icons">
@@ -29,176 +26,28 @@
     </div>
   </header>
 
-   <!-- Tabs (OUTSIDE navbar) -->
-   <div class="tabs-wrapper">
+    <div class="tabs-wrapper">
     <div class="tabs">
       <span >FOLLOWING</span>
       <span class="active">FOLLOWERS</span>
     </div>
   </div>
 
-  <!-- ========== Main Content ========== -->
   <main>
     <div class="users">
 
-      <a href="profile.html" class="user-card-link">
+      <a *ngFor="let follower of followers" [routerLink]="'/profile/' + follower.id" class="user-card-link">
         <div class="user-card">
-          <img src="/assets/jojo.jpg" alt="User Image">
+          <img [src]="follower.profilePicture || '/assets/default-avatar.png'" alt="User Image">
           <div class="user-info">
-            <h3>jonathan</h3>
-            <p>Interior Designer</p>
-            <span>jonathan123</span>
+            <h3>{{ follower.userName }}</h3>
+            <p>{{ follower.role }}</p>
+            <span>{{ follower.userName }}</span>
           </div>
         </div>
       </a>
 
-
-
-
-      <!-- User Card 2 -->
-      <a href="profile.html" class="user-card-link">
-        <div class="user-card">
-          <img src="/assets/jojo.jpg" alt="User Image">
-          <div class="user-info">
-            <h3>jonathan</h3>
-            <p>Interior Designer</p>
-            <span>jonathan123</span>
-          </div>
-        </div>
-      </a>
-
-
-      <!-- User Card 3 -->
-      <a href="profile.html" class="user-card-link">
-        <div class="user-card">
-          <img src="/assets/jojo.jpg" alt="User Image">
-          <div class="user-info">
-            <h3>jonathan</h3>
-            <p>Interior Designer</p>
-            <span>jonathan123</span>
-          </div>
-        </div>
-      </a>
-
-
-      <!-- User Card 4 -->
-      <a href="profile.html" class="user-card-link">
-        <div class="user-card">
-          <img src="/assets/jojo.jpg" alt="User Image">
-          <div class="user-info">
-            <h3>jonathan</h3>
-            <p>Interior Designer</p>
-            <span>jonathan123</span>
-          </div>
-        </div>
-      </a>
-
-
-      <!-- User Card 5 -->
-      <a href="profile.html" class="user-card-link">
-        <div class="user-card">
-          <img src="/assets/jojo.jpg" alt="User Image">
-          <div class="user-info">
-            <h3>jonathan</h3>
-            <p>Interior Designer</p>
-            <span>jonathan123</span>
-          </div>
-        </div>
-      </a>
-
-
-      <!-- User Card 6 -->
-      <a href="profile.html" class="user-card-link">
-        <div class="user-card">
-          <img src="/assets/jojo.jpg" alt="User Image">
-          <div class="user-info">
-            <h3>jonathan</h3>
-            <p>Interior Designer</p>
-            <span>jonathan123</span>
-          </div>
-        </div>
-      </a>
-
-
-      <!-- User Card 7 -->
-      <a href="profile.html" class="user-card-link">
-        <div class="user-card">
-          <img src="/assets/jojo.jpg" alt="User Image">
-          <div class="user-info">
-            <h3>jonathan</h3>
-            <p>Interior Designer</p>
-            <span>jonathan123</span>
-          </div>
-        </div>
-      </a>
-
-
-      <!-- User Card 8 -->
-      <a href="profile.html" class="user-card-link">
-        <div class="user-card">
-          <img src="/assets/jojo.jpg" alt="User Image">
-          <div class="user-info">
-            <h3>jonathan</h3>
-            <p>Interior Designer</p>
-            <span>jonathan123</span>
-          </div>
-        </div>
-      </a>
-
-
-      <!-- User Card 9 -->
-      <a href="profile.html" class="user-card-link">
-        <div class="user-card">
-          <img src="/assets/jojo.jpg" alt="User Image">
-          <div class="user-info">
-            <h3>jonathan</h3>
-            <p>Interior Designer</p>
-            <span>jonathan123</span>
-          </div>
-        </div>
-      </a>
-
-
-      <!-- User Card 10 -->
-      <a href="profile.html" class="user-card-link">
-        <div class="user-card">
-          <img src="/assets/jojo.jpg" alt="User Image">
-          <div class="user-info">
-            <h3>jonathan</h3>
-            <p>Interior Designer</p>
-            <span>jonathan123</span>
-          </div>
-        </div>
-      </a>
-
-
-      <!-- User Card 11 -->
-      <a href="profile.html" class="user-card-link">
-        <div class="user-card">
-          <img src="/assets/jojo.jpg" alt="User Image">
-          <div class="user-info">
-            <h3>jonathan</h3>
-            <p>Interior Designer</p>
-            <span>jonathan123</span>
-          </div>
-        </div>
-      </a>
-
-
-      <!-- User Card 12 -->
-      <a href="profile.html" class="user-card-link">
-        <div class="user-card">
-          <img src="/assets/jojo.jpg" alt="User Image">
-          <div class="user-info">
-            <h3>jonathan</h3>
-            <p>Interior Designer</p>
-            <span>jonathan123</span>
-          </div>
-        </div>
-      </a>
-
-
-    </div>
+      </div>
   </main>
 </body>
 </html>
