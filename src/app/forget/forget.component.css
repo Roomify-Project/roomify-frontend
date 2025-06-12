@@ -1,76 +1,138 @@
+/* جسم الصفحة بالكامل */
 body, html {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  overflow: hidden; /* لمنع ظهور أشرطة التمرير */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* خط حديث وواضح */
 }
 
+/* الحاوية الرئيسية التي تملأ الشاشة بالكامل */
 .all {
-  background: #1a001f;; /* لون الخلفية الثابت */
+  background: #1a001f; /* لون الخلفية الثابت */
   width: 100%;
   height: 100%;
   position: fixed; /* لضمان تغطية الشاشة بالكامل */
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+  overflow: hidden; /* مهم لمنع تجاوز الكرة المتحركة */
 }
 
+/* حاوية مركزية للنموذج */
 .reset-container {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 1; /* للتأكد من ظهور النموذج فوق الكرة المتحركة */
 }
 
+/* صندوق إعادة التعيين (النموذج) */
 .reset-box {
-  background-color: #50003c;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 300px;
-  color: white;
-  z-index: 2;
-}
-
-.reset-box input {
-  margin-bottom: 10px;
-  padding: 10px;
+  background-color: rgba(80, 0, 60, 0.9); /* لون أغمق قليلاً مع شفافية */
+  padding: 40px 30px; /* زيادة المساحة الداخلية */
+  border-radius: 12px; /* حواف أكثر استدارة */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5); /* ظل أعمق وأكثر وضوحاً */
   width: 100%;
-  border-radius: 5px;
-  background-color: #222;
-  border: none;
-  color: #fff;
+  max-width: 380px; /* تحديد أقصى عرض للنموذج */
+  color: white;
+  text-align: center; /* توسيط النصوص والعناصر */
+  z-index: 2; /* تأكيد ظهوره فوق كل شيء */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* حد خفيف لإضافة عمق */
+  backdrop-filter: blur(5px); /* تأثير ضبابي خفيف للخلفية (إذا كان المتصفح يدعم) */
 }
 
+/* عنوان النموذج */
+.reset-box h2 {
+  font-size: 2.2em; /* حجم أكبر للعنوان */
+  margin-bottom: 25px; /* مسافة أسفل العنوان */
+  color: #ffffff; /* لون أبيض نقي */
+  font-weight: 600; /* خط سميك */
+}
+
+/* الفقرة التوضيحية */
+.reset-box p {
+  font-size: 1.05em;
+  color: rgba(255, 255, 255, 0.8); /* لون أبيض فاتح */
+  margin-bottom: 30px; /* مسافة أسفل الفقرة */
+  line-height: 1.5; /* تباعد الأسطر لتحسين القراءة */
+}
+
+/* حقول الإدخال */
+.reset-box input {
+  margin-bottom: 18px; /* مسافة أكبر بين الحقول */
+  padding: 15px 18px; /* زيادة مساحة التعبئة */
+  width: calc(100% - 36px); /* تعديل العرض ليتناسب مع التعبئة */
+  border-radius: 8px; /* حواف أكثر استدارة */
+  background-color: rgba(255, 255, 255, 0.1); /* خلفية شفافة للحقل */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* حد خفيف */
+  color: #fff; /* لون النص داخل الحقل */
+  font-size: 1.05em;
+  transition: border-color 0.3s ease, background-color 0.3s ease; /* تأثير انتقال سلس */
+}
+
+.reset-box input::placeholder {
+  color: rgba(255, 255, 255, 0.5); /* لون تلميح الحقل */
+}
+
+.reset-box input:focus {
+  outline: none; /* إزالة التحديد الافتراضي */
+  border-color: #f750ff; /* لون الحد عند التركيز */
+  background-color: rgba(255, 255, 255, 0.15); /* خلفية أغمق قليلاً عند التركيز */
+}
+
+/* الأزرار */
 .reset-box button {
-  padding: 10px;
-  background-color: #444;
+  padding: 15px 20px;
+  background-color: #f750ff; /* لون بنفسجي جذاب للزر */
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px; /* حواف أكثر استدارة */
   cursor: pointer;
   width: 100%;
+  font-size: 1.15em;
+  font-weight: 600; /* خط سميك */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* تأثير انتقال سلس */
+  letter-spacing: 0.5px; /* تباعد الأحرف */
+  margin-top: 10px; /* مسافة من أعلى */
 }
 
 .reset-box button:hover {
-  background-color: #fcfcfc;
-  color: #50003c;
+  background-color: #e600ff; /* لون أغمق عند التحويم */
+  transform: translateY(-2px); /* رفع الزر قليلاً عند التحويم */
 }
 
+.reset-box button:active {
+  transform: translateY(0); /* إعادة الزر لوضعه الأصلي عند الضغط */
+}
+
+/* رسائل النجاح والخطأ */
 .success {
-  color: green;
-  margin-top: 10px;
+  color: #90ee90; /* أخضر فاتح للنجاح */
+  background-color: rgba(144, 238, 144, 0.2); /* خلفية شفافة فاتحة */
+  border: 1px solid #90ee90;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 25px; /* مسافة أعلى */
+  font-size: 0.95em;
+  animation: fadeIn 0.5s ease-out; /* تأثير الظهور التدريجي */
 }
 
 .error {
-  color: red;
-  margin-top: 10px;
+  color: #ff6347; /* أحمر برتقالي للخطأ */
+  background-color: rgba(255, 99, 71, 0.2); /* خلفية شفافة حمراء */
+  border: 1px solid #ff6347;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 25px; /* مسافة أعلى */
+  font-size: 0.95em;
+  animation: fadeIn 0.5s ease-out; /* تأثير الظهور التدريجي */
 }
 
+/* الكرات المتحركة (كما هي) */
 .animated-ball {
   position: absolute;
   top: 50%;
@@ -81,6 +143,7 @@ body, html {
   border-radius: 50%;
   animation: moveBall 50s infinite alternate ease-in-out;
   z-index: 0;
+  filter: blur(50px); /* إضافة تأثير ضبابي لجعل الكرة تبدو أعمق */
 }
 
 @keyframes moveBall {
@@ -89,4 +152,44 @@ body, html {
   50% { top: 50%; left: 90%; }
   75% { top: 20%; left: 70%; }
   100% { top: 90%; left: 40%; }
+}
+
+/* استجابة للتصغير (responsive) */
+@media (max-width: 500px) {
+  .reset-box {
+    padding: 30px 20px;
+    margin: 0 15px; /* إضافة هامش من الجانبين على الشاشات الصغيرة */
+  }
+
+  .reset-box h2 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+  }
+
+  .reset-box p {
+    font-size: 0.95em;
+    margin-bottom: 25px;
+  }
+
+  .reset-box input {
+    padding: 12px 15px;
+    font-size: 1em;
+  }
+
+  .reset-box button {
+    padding: 12px 15px;
+    font-size: 1.05em;
+  }
+}
+
+/* تأثير الظهور التدريجي للرسائل */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

@@ -1,0 +1,8 @@
+{
+  "/api": {
+    "target": "http://roomify0.runasp.net",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}
