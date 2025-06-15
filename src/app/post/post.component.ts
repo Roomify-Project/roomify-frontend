@@ -2,16 +2,19 @@ import { Component, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { PostRefreshService } from '../services/post-refresh.service';
+import { NavbarComponent } from "../navbar/navbar.component";
 
 @Component({
   selector: 'app-post',
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule
-  ],
+    FormsModule,
+    RouterModule,
+    NavbarComponent
+],
   templateUrl: './post.component.html',
   styleUrl: './post.component.css'
 })

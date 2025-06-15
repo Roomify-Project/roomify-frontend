@@ -62,20 +62,33 @@
         {{ isLoading ? 'Generating...' : 'GENERATE' }}
       </button>
 
-      </div>
+    </div>
   </div>
 
-  <div *ngIf="generatedImageUrl || isLoading" class="results-container">
+  <div *ngIf="isLoading || originalUploadedImageUrl || generatedImageUrls.length > 0" class="results-container">
     <div *ngIf="isLoading" class="loading-spinner">
       <p>Generating your design, please wait...</p>
       <div class="spinner-border text-light" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
     </div>
-    <div *ngIf="generatedImageUrl" class="generated-image-display">
-      <h5>Generated Design:</h5>
-      <img [src]="generatedImageUrl" alt="Generated Room" class="img-fluid rounded generated-output-image">
-      <button class="btn btn-primary mt-3" (click)="downloadImage()">Download Design</button>
+
+    <div *ngIf="originalUploadedImageUrl" class="original-image-display">
+      <h5>Original Room:</h5>
+      <img [src]="originalUploadedImageUrl" alt="Original Room" class="img-fluid rounded generated-output-image">
+      <button class="btn btn-primary mt-3" (click)="downloadImage(originalUploadedImageUrl.toString())">Download Original</button>
+    </div>
+
+    <div *ngIf="generatedImageUrls.length > 0" class="generated-images-grid mt-4">
+      <h5>Generated Designs:</h5>
+      <div class="row">
+        <div *ngFor="let imgUrl of generatedImageUrls" class="col-md-6 col-lg-4 mb-4">
+          <div class="image-wrapper">
+            <img [src]="imgUrl" alt="Generated Room Design" class="img-fluid rounded generated-output-image">
+            <button class="btn btn-primary mt-2" (click)="downloadImage(imgUrl)">Download Design</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 

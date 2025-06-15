@@ -39,7 +39,9 @@
   <main class="main-content">
     <div class="gallery">
       <div class="image-card" *ngFor="let post of posts">
-        <img [src]="post.imagePath" alt="Room">
+        <a [routerLink]="['/comment', post.id]">
+          <img [src]="post.imagePath" alt="Room">
+        </a>
 
         <div class="post-description">
           {{ post.description }}

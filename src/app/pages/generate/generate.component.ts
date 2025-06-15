@@ -5,7 +5,8 @@ import { NavbarComponent } from '../../navbar/navbar.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RoomImageService } from '../../services/room-image.service';
-import { AuthService } from '../../services/auth.service'; // **تم استيراد AuthService**
+import { AuthService } from '../../services/auth.service';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser'; // ✳️ تم استيراد DomSanitizer للتعامل مع مسارات الصور المحلية
 
 @Component({
   selector: 'app-generate',
@@ -25,11 +26,14 @@ export class GenerateComponent implements OnInit {
   promptText = '';
   roomType = '';
   designStyle = '';
-  generatedImageUrl = '';
+  // ✳️ تم تغيير generatedImageUrl إلى مصفوفة لتخزين الروابط المتعددة
+  generatedImageUrls: string[] = [];
+  // ✳️ متغير جديد لتخزين URL الصورة الأصلية التي تم رفعها
+  originalUploadedImageUrl: SafeUrl | null = null;
   isLoading = false;
 
   selectedFile: File | null = null;
-  userId: string = ''; // سيتم جلبها من AuthService
+  userId: string = '';
 
   selectedRoomType: string = '';
   showRoomTypeMenu: boolean = false;
@@ -53,24 +57,20 @@ export class GenerateComponent implements OnInit {
     { name: 'Minimalist', img: 'assets/designstyles/minimalist.png' }
   ];
 
-  // **حقن AuthService في الـ constructor**
-  constructor(private roomImageService: RoomImageService, private authService: AuthService) { }
+  constructor(
+    private roomImageService: RoomImageService,
+    private authService: AuthService,
+    private sanitizer: DomSanitizer // ✳️ حقن DomSanitizer
+  ) { }
 
   ngOnInit(): void {
-    // **جلب الـ userId من localStorage باستخدام AuthService**
-    // نفترض أن AuthService يقوم بحفظ الـ userId في localStorage بعد تسجيل الدخول
-    // تحتاج للتأكد من أن الـ userId يتم حفظه في localStorage بواسطة AuthService عند تسجيل الدخول
     const storedUserId = localStorage.getItem('userId');
     if (storedUserId) {
       this.userId = storedUserId;
     } else {
       console.warn('User ID not found in localStorage. User might not be logged in or userId was not stored.');
-      // يمكنك هنا إضافة منطق لإعادة توجيه المستخدم لصفحة تسجيل الدخول
-      // أو عرض رسالة خطأ
       alert('You are not logged in. Please log in to generate designs.');
-      // مثال لإعادة التوجيه (يتطلب Router):
-      // import { Router } from '@angular/router';
-      // constructor(..., private router: Router) { }
+      // يمكنك هنا إضافة منطق لإعادة توجيه المستخدم لصفحة تسجيل الدخول باستخدام Router
       // this.router.navigate(['/login']);
     }
   }
@@ -103,13 +103,23 @@ export class GenerateComponent implements OnInit {
     const file: File = event.target.files[0];
     if (file) {
       this.selectedFile = file;
+      // ✳️ عرض معاينة للصورة التي تم رفعها محليًا
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.originalUploadedImageUrl = this.sanitizer.bypassSecurityTrustUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     } else {
       this.selectedFile = null;
+      this.originalUploadedImageUrl = null;
     }
   }
 
   generateDesign() {
-    // التحقق من الحقول المطلوبة قبل الإرسال
+    // ✳️ إعادة تعيين الصور الناتجة والصورة الأصلية من الرفع في كل عملية توليد جديدة
+    this.generatedImageUrls = [];
+    // originalUploadedImageUrl لا يتم مسحها هنا، بل في onFileSelected إذا لم يتم اختيار ملف
+
     if (!this.promptText.trim() && !this.selectedFile) {
       alert('Please provide a description or upload an image.');
       return;
@@ -122,13 +132,11 @@ export class GenerateComponent implements OnInit {
         alert('Please select a design style.');
         return;
     }
-    // **التحقق من وجود userId قبل الإرسال**
     if (!this.userId) {
         alert('User ID is not available. Please ensure you are logged in.');
-        this.isLoading = false;
+        this.isLoading = false; // تأكد من إيقاف حالة التحميل
         return;
     }
-
 
     this.isLoading = true;
     const formData = new FormData();
@@ -139,19 +147,29 @@ export class GenerateComponent implements OnInit {
     formData.append('descriptionText', this.promptText);
     formData.append('roomType', this.roomType);
     formData.append('roomStyle', this.designStyle);
-    formData.append('userId', this.userId); // **سيتم إرسال معرف المستخدم الذي تم جلبه من localStorage**
+    formData.append('userId', this.userId);
 
     this.roomImageService.generateDesign(formData)
       .subscribe({
         next: (res: any) => {
+          // ✳️ عرض الصورة الأصلية التي جاءت من الـ API (إذا كانت موجودة)
           if (res && res.originalRoomImage) {
-            this.generatedImageUrl = res.originalRoomImage;
-          } else if (res && res.generatedImageUrls && res.generatedImageUrls.length > 0) {
-            this.generatedImageUrl = res.generatedImageUrls[0];
+            // إذا كان الـ API يرجع رابط للصورة الأصلية، استخدمه
+            this.originalUploadedImageUrl = res.originalRoomImage;
+          } else if (this.selectedFile) {
+            // وإلا، حافظ على الصورة التي تم رفعها محليًا للمعاينه
+            // (تم التعامل معها بالفعل في onFileSelected)
           } else {
-            console.warn('API response did not contain expected image URL. Response:', res);
-            this.generatedImageUrl = '';
-            alert('Could not retrieve generated image URL from API response. Please check API response structure.');
+            this.originalUploadedImageUrl = null; // لا يوجد لا صورة مرفوعة ولا صورة من الـ API
+          }
+
+          // ✳️ تخزين الروابط المولدة في مصفوفة
+          if (res && res.generatedImageUrls && res.generatedImageUrls.length > 0) {
+            this.generatedImageUrls = res.generatedImageUrls;
+          } else {
+            console.warn('API response did not contain expected generated image URLs. Response:', res);
+            this.generatedImageUrls = [];
+            // alert('Could not retrieve generated image URLs from API response.');
           }
           this.isLoading = false;
         },
@@ -163,11 +181,13 @@ export class GenerateComponent implements OnInit {
       });
   }
 
-  downloadImage() {
-    if (this.generatedImageUrl) {
+  downloadImage(imageUrl: string) { // ✳️ تم تعديل الدالة لتقبل رابط الصورة المراد تحميلها
+    if (imageUrl) {
       const link = document.createElement('a');
-      link.href = this.generatedImageUrl;
-      link.download = `room_design_${Date.now()}.png`;
+      link.href = imageUrl;
+      // استخراج اسم الملف من الرابط أو استخدام اسم افتراضي
+      const fileName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1) || `room_design_${Date.now()}.png`;
+      link.download = fileName;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
