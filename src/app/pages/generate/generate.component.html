@@ -62,40 +62,49 @@
         {{ isLoading ? 'Generating...' : 'GENERATE' }}
       </button>
 
-      <div *ngIf="generatedImageUrl" class="mt-4 text-center">
-        <h5>Generated Design:</h5>
-        <img [src]="generatedImageUrl" alt="Generated Room" class="img-fluid rounded" style="max-width: 100%; height: auto; border: 1px solid #ccc;">
-        <button class="btn btn-primary mt-3" (click)="downloadImage()">Download Design</button>
+      </div>
+  </div>
+
+  <div *ngIf="generatedImageUrl || isLoading" class="results-container">
+    <div *ngIf="isLoading" class="loading-spinner">
+      <p>Generating your design, please wait...</p>
+      <div class="spinner-border text-light" role="status">
+        <span class="visually-hidden">Loading...</span>
       </div>
     </div>
-
-    <div *ngIf="showSidebar" class="sidebar-container">
-      <button class="btn-close btn-close-white float-end" aria-label="Close" (click)="toggleSidebar()"></button>
-      <h5>Upload furniture images</h5>
-      <p>Upload your furniture that you need to place in the room.<br>And enter distances for every piece.</p>
-
-      <div class="mb-3">
-        <label class="form-label text-white">Room image</label>
-        <input type="file" class="form-control">
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label text-white">Length</label>
-        <input type="number" class="form-control">
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label text-white">Width</label>
-        <input type="number" class="form-control">
-      </div>
-
-      <div class="mb-3">
-        <label class="form-label text-white">Height</label>
-        <input type="number" class="form-control">
-      </div>
-
-      <button class="btn btn-outline-light w-100 mb-2">➕ Add last one</button>
-      <button class="btn btn-generate">Save</button>
+    <div *ngIf="generatedImageUrl" class="generated-image-display">
+      <h5>Generated Design:</h5>
+      <img [src]="generatedImageUrl" alt="Generated Room" class="img-fluid rounded generated-output-image">
+      <button class="btn btn-primary mt-3" (click)="downloadImage()">Download Design</button>
     </div>
+  </div>
+
+  <div *ngIf="showSidebar" class="sidebar-container">
+    <button class="btn-close btn-close-white float-end" aria-label="Close" (click)="toggleSidebar()"></button>
+    <h5>Upload furniture images</h5>
+    <p>Upload your furniture that you need to place in the room.<br>And enter distances for every piece.</p>
+
+    <div class="mb-3">
+      <label class="form-label text-white">Room image</label>
+      <input type="file" class="form-control">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label text-white">Length</label>
+      <input type="number" class="form-control">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label text-white">Width</label>
+      <input type="number" class="form-control">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label text-white">Height</label>
+      <input type="number" class="form-control">
+    </div>
+
+    <button class="btn btn-outline-light w-100 mb-2">➕ Add last one</button>
+    <button class="btn btn-generate">Save</button>
   </div>
 </div>

@@ -1,4 +1,5 @@
 <div class="chat-container">
+
   <div class="sidebar">
     <div class="app-logo">
       <h1>ROOMIFY</h1>
@@ -18,6 +19,7 @@
         <div class="name">{{ user.fullName || user.userName }}</div>
         <div class="preview">{{ user.bio || 'لا يوجد وصف متاح' }}</div>
       </div>
+      <!-- يمكنك عرض وقت آخر رسالة حقيقي هنا إذا كان متاحًا من الـ API -->
       <div class="time">{{ user.lastMessageTime | date : 'shortTime' }}</div>
     </div>
   </div>
@@ -64,6 +66,7 @@
               {{ item.value.text }}
               <div class="message-details">
                 <span class="time">{{ item.value.time | date : 'shortTime' }}</span>
+                <!-- إيصال قراءة: يظهر فقط لرسائلك إذا كنت ترغب في تنفيذه -->
                 <i *ngIf="item.value.sender === 'me'" class="fas fa-check-double read-receipt"></i>
               </div>
             </div>

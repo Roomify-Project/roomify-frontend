@@ -1,21 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Reset Password</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <div class="reset-container">
-    <div class="reset-box">
-      <h2>Confirm E-mail</h2>
-      <p>Type your email to send Verifivation code</p>
-      <form>
-        <input type="email" placeholder="E-mail" required />
-        <button type="submit">Continue</button>
-      </form>
-    </div>
+<!-- src/app/confirm-email/confirm-email.component.html -->
+
+<!-- ملاحظة: لا تحتاج لعلامات <!DOCTYPE html>, <html>, <head>, <body> في ملفات قوالب مكونات Angular. -->
+<!-- يقوم Angular بدمج هذه القوالب تلقائياً داخل الهيكل العام لصفحة الـ HTML. -->
+
+<div class="confirm-email-container">
+  <div class="confirm-email-box">
+    <h2>تأكيد البريد الإلكتروني</h2>
+    <p>الرجاء إدخال بريدك الإلكتروني والكود الذي تم إرساله إليك.</p>
+
+    <form [formGroup]="confirmEmailForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email">البريد الإلكتروني</label>
+        <input
+          id="email"
+          formControlName="email"
+          type="email"
+          placeholder="البريد الإلكتروني"
+          required
+        />
+        <!-- عرض رسالة الخطأ للبريد الإلكتروني -->
+        <p class="error" *ngIf="f['email']?.invalid && submitted">
+          الرجاء إدخال بريد إلكتروني صالح.
+        </p>
+      </div>
+
+      <div class="form-group">
+        <label for="otpCode">كود التحقق (OTP)</label>
+        <input
+          id="otpCode"
+          formControlName="otpCode"
+          type="text"
+          placeholder="أدخل الكود المكون من 6 أرقام"
+          required
+          maxlength="6"
+        />
+        <!-- عرض رسالة الخطأ لكود التحقق -->
+        <p class="error" *ngIf="f['otpCode']?.invalid && submitted">
+          الرجاء إدخال كود تحقق صالح مكون من 6 أرقام (أرقام فقط).
+        </p>
+      </div>
+
+      <!-- زر الإرسال، مع تعطيله إذا كان النموذج غير صالح -->
+      <button type="submit" [disabled]="confirmEmailForm.invalid">تأكيد</button>
+
+      <!-- عرض رسالة الخطأ العامة إذا كانت موجودة -->
+      <p *ngIf="errorMessage" class="error-message">{{ errorMessage }}</p>
+      <!-- عرض رسالة النجاح إذا كانت موجودة -->
+      <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
+    </form>
   </div>
-</body>
-</html>
+</div>

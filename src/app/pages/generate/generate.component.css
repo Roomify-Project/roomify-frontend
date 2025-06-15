@@ -3,21 +3,31 @@ body, html {
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden;
+  overflow: hidden; /* لمنع شريط التمرير الافتراضي للصفحة بالكامل */
   font-family: sans-serif;
-}
-.all {
-  background-color: #0d0215;
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  display: flex;
-  justify-content: flex-start; /* بدلاً من center */
-  align-items: flex-start;     /* كمان نخليه يبدأ من فوق */
-  padding: 40px;               /* نضيف شوية مساحة من الجوانب */
-  box-sizing: border-box;
+  background-color: #0d0215; /* نقل لون الخلفية هنا لتغطية كامل الشاشة */
 }
 
+.all {
+  /* background-color: #0d0215;  تم نقل هذا لـ body, html */
+  width: 100%;
+  height: 100%;
+  /* position: fixed;  سنستخدم الـ flexbox لترتيب العناصر */
+  display: flex; /* يجعل العناصر (main-content, results-container, sidebar-container) تتوزع جنبًا إلى جنب */
+  justify-content: flex-start; /* يبدأ العناصر من اليسار */
+  align-items: flex-start; /* يبدأ العناصر من الأعلى */
+  padding: 40px; /* مساحة من الجوانب والأسفل والأعلى */
+  box-sizing: border-box; /* لضمان أن الـ padding لا يزيد العرض الكلي */
+  gap: 40px; /* مسافة بين main-content و results-container */
+  position: relative; /* مهم لتموضع العناصر بداخله إذا كانت absolute */
+  overflow: hidden; /* لمنع المحتوى المتجاوز من الظهور خارج .all */
+}
+
+/* حالة خاصة لـ body عندما يكون الشريط الجانبي (Add room images) مفتوحًا */
+body.sidebar-open .all {
+    /* يمكنك هنا ضبط الهامش الأيمن لـ .all أو main-content لدفع المحتوى */
+    /* بما أن .all به padding بالفعل، قد تحتاج لضبط هامش main-content فقط */
+}
 
 
 @keyframes moveBall {
@@ -29,18 +39,21 @@ body, html {
 }
 
 .main-content {
-  display: flex;
-  gap: 30px;
+  /* display: flex;  تم نقلها إلى .all */
+  /* gap: 30px;     تم نقلها إلى .all */
+  flex-shrink: 0; /* يمنع هذا من التقلص، لضمان عرض ثابت للـ container */
+  width: 600px; /* العرض الثابت للحاوية الرئيسية */
   z-index: 1;
-  align-items: flex-start;
+  /* align-items: flex-start; تم نقلها إلى .all */
 }
 
 .container {
-  max-width: 600px;
+  max-width: 100%; /* يجب أن يكون 100% ليتناسب مع عرض الـ main-content */
   background: rgba(0, 0, 0, 0.3);
   padding: 20px;
   border-radius: 10px;
   color: white;
+  box-sizing: border-box; /* لضمان أن الـ padding لا يزيد العرض الكلي */
 }
 
 .btn-generate {
@@ -51,7 +64,13 @@ body, html {
   color: white;
   font-weight: bold;
   border-radius: 8px;
+  cursor: pointer; /* إضافة مؤشر اليد عند المرور فوق الزر */
 }
+.btn-generate:disabled {
+  opacity: 0.6; /* تقليل الشفافية عند التعطيل */
+  cursor: not-allowed; /* تغيير المؤشر */
+}
+
 
 .input-group-text {
   background: rgba(255, 255, 255, 0.1);
@@ -63,16 +82,23 @@ body, html {
   background: rgba(255, 255, 255, 0.1);
   border: none;
   color: white;
+  /* لتغيير لون placeholder */
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+  }
 }
 
 .form-control:focus {
   background: rgba(255, 255, 255, 0.2);
   color: white;
+  box-shadow: 0 0 0 0.25rem rgba(128, 0, 128, 0.25); /* ظل تركيز بلون بنفسجي خفيف */
+  border-color: purple; /* لون الحدود عند التركيز */
 }
 
 .btn-outline-light {
   border-color: white;
   color: white;
+  cursor: pointer;
 }
 
 .btn-outline-light:hover {
@@ -80,24 +106,120 @@ body, html {
   color: white;
 }
 
-.sidebar-container {
-  background: rgba(255, 255, 255, 0.05);
+/* **المنطقة الجديدة لعرض الصورة المولدة على الجانب** */
+.results-container {
+  flex-grow: 1; /* يسمح لها بالنمو لملء المساحة المتبقية */
+  max-width: calc(100% - 600px - 40px - 40px); /* 100% - عرض main-content - padding الـ .all - gap */
+  background: rgba(0, 0, 0, 0.3);
   padding: 20px;
   border-radius: 10px;
-  width: 300px;
   color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-sizing: border-box;
 }
-.room-type-menu-right {
-  background: rgba(255, 255, 255, 0.05);
+
+.generated-image-display {
+    width: 100%; /* تأكد أنها تأخذ عرض الحاوية */
+    height: 100%; /* تأخذ ارتفاع الحاوية */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px; /* مسافة بين العناصر */
+}
+
+.generated-image-display img {
+  max-width: 90%; /* نسبة مئوية لتكون متجاوبة */
+  max-height: 90%; /* نسبة مئوية لتكون متجاوبة */
+  object-fit: contain; /* للحفاظ على نسبة العرض إلى الارتفاع */
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* توسيط عمودي */
+  gap: 15px;
+  font-size: 1.2em;
+  height: 100%; /* لضمان توسيطها في وسط results-container */
+  width: 100%;
+}
+.spinner-border {
+    width: 3rem; /* حجم أكبر للـ spinner */
+    height: 3rem;
+}
+
+
+/* Styling for the Add Room Images Sidebar */
+.sidebar-container {
+  position: fixed; /* يبقى ثابتًا في مكانه */
+  top: 0;
+  right: 0;
+  width: 350px; /* عرض الشريط الجانبي */
+  height: 100%;
+  background-color: #2c003e; /* لون الخلفية */
   padding: 20px;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5); /* ظل لإبرازه */
+  transform: translateX(100%); /* يخفيه خارج الشاشة افتراضيًا */
+  transition: transform 0.3s ease-in-out; /* حركة سلسة للظهور والاختفاء */
+  z-index: 1050; /* تأكد أنه يظهر فوق العناصر الأخرى */
+  overflow-y: auto; /* لإضافة شريط تمرير إذا كان المحتوى أطول من الشاشة */
+  color: white;
+  box-sizing: border-box; /* لضمان أن الـ padding لا يزيد العرض الكلي */
+}
+
+/* حالة عندما يكون الشريط الجانبي مرئيًا */
+.sidebar-container.show {
+  transform: translateX(0); /* يظهره داخل الشاشة */
+}
+
+/* زر الإغلاق داخل الشريط الجانبي */
+.sidebar-container .btn-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  z-index: 1060;
+  color: white; /* تأكد أن لون زر الإغلاق مرئي */
+}
+
+/* overlay إذا كنت تستخدمه */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1040;
+}
+
+
+/* Room Type and Design Style Dropdown Menus */
+.room-type-menu-right,
+.design-style-menu-right {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 15px; /* تقليل الـ padding قليلاً */
   border-radius: 10px;
   color: white;
   position: absolute;
-  top: 0;
-  left: 105%;
-  width: 300px;
-  z-index: 1000;
+  top: 0; /* ممكن تعديل هذا ليتناسب مع موضع الزر */
+  left: 105%; /* يظهر بجانب زر الاختيار */
+  width: 250px; /* عرض أصغر قليلاً */
+  z-index: 1000; /* يجب أن يكون أقل من الشريط الجانبي الكبير */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
+}
+
+.room-type-menu-right h6,
+.design-style-menu-right h6 {
+    margin-top: 0;
+    margin-bottom: 10px;
 }
 
 .room-options {
@@ -112,16 +234,81 @@ body, html {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   padding: 10px;
-  transition: 0.3s;
+  transition: background-color 0.3s; /* إضافة transition */
   color: white;
 }
 
 .room-option:hover {
-  background-color: #444;
+  background-color: #6a0dad; /* لون أغمق عند المرور عليه */
 }
 
 .room-option img {
   width: 100%;
   height: auto;
   border-radius: 6px;
+}
+
+/* **Media Queries for Responsiveness** */
+@media (max-width: 1200px) {
+    .all {
+        padding: 30px;
+        gap: 30px;
+        flex-direction: column; /* تكديس المحتوى والنتائج رأسياً */
+        align-items: center; /* توسيط العناصر عندما تتكدس */
+        overflow-y: auto; /* السماح بشريط تمرير عمودي إذا زاد المحتوى */
+    }
+    .main-content {
+        width: 100%; /* تأخذ العرض الكامل المتاح مع الـ padding */
+        max-width: 600px; /* للحفاظ على عرض معقول على الشاشات الكبيرة نسبيًا */
+        min-width: unset; /* إزالة الحد الأدنى للعرض */
+    }
+    .container {
+        width: 100%; /* تأكد أن الحاوية داخل main-content تأخذ عرضها الكامل */
+    }
+    .results-container {
+        width: 100%; /* تأخذ العرض الكامل */
+        max-width: 600px; /* ليتناسب مع عرض الـ main-content في التكديس */
+        height: 400px; /* ارتفاع ثابت لنتائج الصورة */
+        min-height: 250px; /* ارتفاع أدنى */
+        margin-top: 30px; /* مسافة بين main-content والنتائج */
+    }
+    .room-type-menu-right,
+    .design-style-menu-right {
+        left: unset; /* إلغاء التموضع لليسار */
+        right: 0; /* وجعله يظهر على اليمين */
+        top: 100%; /* تحت الزر مباشرة */
+        width: 250px; /* نفس العرض */
+    }
+}
+
+@media (max-width: 768px) {
+    .all {
+        padding: 20px;
+        gap: 20px;
+    }
+    .results-container {
+        height: 300px; /* ارتفاع أقل على الشاشات الأصغر */
+    }
+    .loading-spinner {
+        font-size: 1em;
+    }
+    .spinner-border {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .all {
+        padding: 15px;
+    }
+    .results-container {
+        height: 250px; /* ارتفاع أقل للشاشات الصغيرة جدًا */
+    }
+    .room-type-menu-right,
+    .design-style-menu-right {
+        width: 90%; /* تأخذ عرضًا أكبر لتناسب الشاشة الصغيرة */
+        left: 5%; /* توسيطها */
+        right: 5%;
+    }
 }

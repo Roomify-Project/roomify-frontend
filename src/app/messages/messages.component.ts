@@ -21,9 +21,9 @@ export class MessagesComponent implements OnInit {
   currentUserId: string | null = null;
   private authToken: string | null = null;
 
-  // **هام جدًا:** تأكد أن هذا الـ URL يتطابق مع الـ URL الأساسي للـ Auth API
-  // تم تعديل الـ API_BASE_URL ليستخدم الـ Proxy
-  private readonly API_BASE_URL = '/api'; // <--- هذا هو التعديل الأساسي
+  // تأكد أن هذا المسار يتطابق مع إعدادات الـ proxy في Angular.json
+  // ليتم توجيه الطلبات إلى http://roomify0.runasp.net/api
+  private readonly API_BASE_URL = '/api';
 
   constructor(
     private http: HttpClient
@@ -39,12 +39,14 @@ export class MessagesComponent implements OnInit {
     if (!this.currentUserId || !this.authToken) {
       console.error('معرف المستخدم أو رمز المصادقة غير موجود في localStorage. يرجى التأكد من تسجيل الدخول بشكل صحيح أولاً.');
       // يمكنك توجيه المستخدم إلى صفحة تسجيل الدخول هنا إذا لزم الأمر
+      // مثال: this.router.navigate(['/login']); (إذا قمت بحقن Router)
       return;
     }
 
     this.loadUsers();
   }
 
+  // دالة مساعدة لإنشاء Headers المصادقة
   private getAuthHeaders(): HttpHeaders {
     if (!this.authToken) {
       console.error('رمز المصادقة غير متوفر. لا يمكن إنشاء Headers للمصادقة.');
@@ -55,6 +57,7 @@ export class MessagesComponent implements OnInit {
     });
   }
 
+  // تحميل قائمة المستخدمين (لإنشاء المحادثات في الشريط الجانبي)
   loadUsers(): void {
     console.log('Attempting to load users from:', `${this.API_BASE_URL}/users`, 'with token:', this.authToken);
     const headers = this.getAuthHeaders();
@@ -64,37 +67,40 @@ export class MessagesComponent implements OnInit {
         return throwError(() => new Error('خطأ في جلب المستخدمين. يرجى المحاولة مرة أخرى.'));
       })
     ).subscribe(users => {
-      // قم بتصفية المستخدم الحالي من القائمة إذا كان موجودًا
+      // قم بتصفية المستخدم الحالي من القائمة لكي لا يحادث نفسه
       this.users = users.filter(user => user.id !== this.currentUserId).map(user => ({
         ...user,
-        lastMessageTime: new Date(Date.now() - Math.random() * 86400000) // هذا لا يزال بيانات وهمية، يمكنك تحديثه لاحقًا لآخر وقت رسالة حقيقي
+        // هذا لا يزال بيانات وهمية لآخر وقت رسالة، يمكنك تحديثه لاحقًا لآخر وقت رسالة حقيقي من الـ API
+        lastMessageTime: new Date(Date.now() - Math.random() * 86400000)
       }));
     });
   }
 
+  // عند اختيار مستخدم من الشريط الجانبي
   selectUser(user: any): void {
-    if (this.selectedUser?.id !== user.id) {
+    if (this.selectedUser?.id !== user.id) { // لتجنب إعادة التحميل إذا كان نفس المستخدم محددًا
       this.selectedUser = user;
-      this.loadMessagesForSelectedUser(this.selectedUser.id);
+      this.loadMessagesForSelectedUser(this.selectedUser.id); // جلب الرسائل للمستخدم المختار
     }
   }
 
+  // جلب الرسائل للمحادثة المحددة
   loadMessagesForSelectedUser(targetUserId: string): void {
     if (!this.currentUserId) {
         console.error('معرف المستخدم الحالي غير متوفر. لا يمكن جلب الرسائل.');
         return;
     }
-    console.log(`Attempting to load messages for current user ${this.currentUserId} to chat with ${targetUserId} from: ${this.API_BASE_URL}/Chat/getMessages/${this.currentUserId} with token:`, this.authToken);
+    console.log(`Attempting to load messages for current user ${this.currentUserId} from: ${this.API_BASE_URL}/Chat/getMessages/${this.currentUserId} with token:`, this.authToken);
     const headers = this.getAuthHeaders();
 
-    // API Call to get all messages for the current user
+    // استدعاء الـ API لجلب جميع الرسائل المتعلقة بالمستخدم الحالي (مرسل أو مستقبل)
     this.http.get<any[]>(`${this.API_BASE_URL}/Chat/getMessages/${this.currentUserId}`, { headers }).pipe(
       catchError(error => {
         console.error('حدث خطأ أثناء جلب الرسائل:', error);
         return throwError(() => new Error('خطأ في جلب الرسائل.'));
       })
     ).subscribe(apiMessages => {
-      // Filter messages relevant to the current chat (between current user and selected user)
+      // تصفية الرسائل ذات الصلة بالمحادثة الحالية (بين المستخدم الحالي والمستخدم المختار)
       const relevantMessages = apiMessages
         .filter(msg =>
           (msg.senderId === this.currentUserId && msg.receiverId === targetUserId) ||
@@ -102,19 +108,20 @@ export class MessagesComponent implements OnInit {
         )
         .map(msg => ({
           text: msg.content,
-          // Determine sender based on currentUserId
+          // تحديد المرسل بناءً على currentUserId
           sender: msg.senderId === this.currentUserId ? 'me' : 'other',
-          time: new Date(msg.sentAt)
+          time: new Date(msg.sentAt) // تحويل sentAt إلى Date object
         }));
 
-      this.messages = relevantMessages;
-      this.messages.sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime());
+      this.messages = relevantMessages; // تعيين الرسائل المفلترة
+      this.messages.sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime()); // فرز الرسائل حسب الوقت
 
-      this.processMessagesForDisplay(this.messages);
-      setTimeout(() => this.scrollToBottom(), 0);
+      this.processMessagesForDisplay(this.messages); // معالجة الرسائل لإضافة فواصل التاريخ
+      setTimeout(() => this.scrollToBottom(), 0); // التمرير إلى أسفل المحادثة
     });
   }
 
+  // إرسال رسالة جديدة
   sendMessage(): void {
     if (this.newMessage.trim() === '' || !this.selectedUser || !this.currentUserId) {
       console.warn('لا يمكن إرسال الرسالة: النص فارغ، أو لا يوجد مستخدم محدد، أو معرف المستخدم الحالي غير متوفر.');
@@ -127,12 +134,12 @@ export class MessagesComponent implements OnInit {
       message: this.newMessage
     };
 
-    // Add optimistic message to the UI
+    // إضافة الرسالة بشكل متفائل (Optimistic Update) للواجهة قبل تأكيد الإرسال
     const optimisticMessage = {
       text: this.newMessage,
       sender: 'me',
       time: new Date(),
-      status: 'sending' // Custom status to indicate it's not confirmed yet
+      status: 'sending' // حالة مخصصة للإشارة إلى أنها لم تتأكد بعد
     };
     this.messages.push(optimisticMessage);
     this.processMessagesForDisplay(this.messages);
@@ -143,27 +150,29 @@ export class MessagesComponent implements OnInit {
     this.http.post(`${this.API_BASE_URL}/Chat/sendMessage`, messagePayload, { headers }).pipe(
       catchError(error => {
         console.error('حدث خطأ أثناء إرسال الرسالة:', error);
-        // Remove optimistic message if sending fails
+        // إزالة الرسالة المتفائلة إذا فشل الإرسال
         this.messages = this.messages.filter(msg => msg !== optimisticMessage);
         this.processMessagesForDisplay(this.messages);
         return throwError(() => new Error('فشل إرسال الرسالة.'));
       })
     ).subscribe(response => {
       console.log('الرسالة أرسلت بنجاح:', response);
-      // After successful send, refresh messages to get the confirmed message from the server
-      // and remove the optimistic message
+      // بعد الإرسال الناجح، قم بإزالة الرسالة المتفائلة ثم أعد تحميل الرسائل
+      // (هذا يضمن أن الرسالة التي ظهرت هي من الخادم وأنها متزامنة)
       this.messages = this.messages.filter(msg => msg !== optimisticMessage);
       this.loadMessagesForSelectedUser(this.selectedUser.id);
-      this.newMessage = ''; // Clear the input field
+      this.newMessage = ''; // مسح حقل الإدخال
     });
   }
 
+  // مسح المستخدم المختار لإغلاق نافذة الدردشة
   clearSelectedUser(): void {
     this.selectedUser = null;
     this.messages = [];
     this.processedMessages = [];
   }
 
+  // معالجة الرسائل لإضافة فواصل التاريخ (اليوم، أمس، تاريخ محدد)
   private processMessagesForDisplay(rawMessages: any[]): void {
     this.processedMessages = [];
     let lastDate: Date | null = null;
@@ -172,7 +181,7 @@ export class MessagesComponent implements OnInit {
 
     rawMessages.forEach(msg => {
       const messageDate = new Date(msg.time);
-      messageDate.setHours(0, 0, 0, 0);
+      messageDate.setHours(0, 0, 0, 0); // تجاهل الوقت لغرض المقارنة اليومية
 
       if (!lastDate || messageDate.getTime() !== lastDate.getTime()) {
         let separatorText = '';
@@ -204,6 +213,7 @@ export class MessagesComponent implements OnInit {
     });
   }
 
+  // التمرير إلى أسفل نافذة الدردشة تلقائيًا
   private scrollToBottom(): void {
     const chatBody = document.querySelector('.chat-body');
     if (chatBody) {
